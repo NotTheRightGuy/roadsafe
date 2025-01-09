@@ -4,9 +4,9 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { MapProvider } from "@/context/MapContext";
 import { LocationProvider } from "@/components/LocationContext";
 
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
+export const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
     title: "RoadSafe by Chill Guys",
     description: "A road safety app",
 };
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${jakarta.className} antialiased h-full w-full`}>
+            <body className={`${jakarta.className} h-full w-full`}>
                 <LocationProvider>
                     <MapProvider>{children}</MapProvider>
                 </LocationProvider>
