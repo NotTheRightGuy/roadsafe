@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BotMessageSquare, Send } from "lucide-react";
 
+const BACKEND_URL = "http://localhost:8000/api/process";
+
 function Chatbot() {
   const [messages, setMessages] = useState<
     { query: string; response: string }[]
@@ -21,7 +23,7 @@ function Chatbot() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/process", {
+      const res = await fetch(BACKEND_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
