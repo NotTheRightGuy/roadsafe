@@ -4,12 +4,14 @@ import {
     useContext,
     useState,
     useEffect,
+    useRef,
     ReactNode,
 } from "react";
-import { OlaMaps } from "@/mapsSDK";
-import { useLocation } from "@/hooks/useLocation";
+
 import { CurrentMarker } from "@/components/markers";
 import { renderToString } from "react-dom/server";
+import { OlaMaps } from "@/mapsSDK";
+import { useLocationContext } from "@/components/LocationContext";
 
 interface MapContextProps {
     map: any;
@@ -29,20 +31,29 @@ const MapContext = createContext<MapContextProps | undefined>(undefined);
 
 export const MapProvider = ({ children }: { children: ReactNode }) => {
     const [map, setMap] = useState<any>(null);
-    const currentLocation = useLocation();
-    const olaMaps = new OlaMaps({
-        apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-    });
+    const ctxValue = useLocationContext();
+    const currentLocation = ctxValue?.currentLocation;
+
+    const olaMapsRef = useRef<OlaMaps | null>(null);
+
+    useEffect(() => {
+        if (!olaMapsRef.current) {
+            olaMapsRef.current = new OlaMaps({
+                apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
+            });
+        }
+    }, []);
 
     const initMap = (location: { longitude: number; latitude: number }) => {
         const { longitude, latitude } = location;
         if (!map) {
-            const myMap = olaMaps.init({
+            const myMap = olaMapsRef.current!.init({
                 container: "map",
                 center: [longitude, latitude],
                 zoom: 15,
             });
             addMarker(longitude, latitude, myMap, CurrentMarker);
+
             setMap(myMap);
             document
                 .getElementsByClassName("maplibregl-ctrl-attrib")[0]
@@ -62,12 +73,15 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
             const customMarker = document.createElement("div");
             customMarker.innerHTML = renderToString(marker());
 
-            olaMaps
-                .addMarker({ element: customMarker })
+            olaMapsRef
+                .current!.addMarker({ element: customMarker })
                 .setLngLat([longitude, latitude])
                 .addTo(map);
         } else {
-            olaMaps.addMarker().setLngLat([longitude, latitude]).addTo(map);
+            olaMapsRef
+                .current!.addMarker()
+                .setLngLat([longitude, latitude])
+                .addTo(map);
         }
     };
 
