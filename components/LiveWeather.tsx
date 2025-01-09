@@ -1,7 +1,6 @@
 "use client"
 import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
-import { Snowflake, Droplets, Wind, Cloud } from "lucide-react";
 import Image from "next/image";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 
