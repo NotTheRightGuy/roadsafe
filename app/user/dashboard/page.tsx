@@ -7,8 +7,7 @@ import AlertIcon from "@/components/AlertIcon";
 import useGetIncidents from "@/hooks/useGetIncidents";
 import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
-import getCords from "@/lib/getCords";
-import getDirection from "@/lib/getDirection";
+import { supabase } from "@/lib/supabase";
 import NavigationBar from "@/components/NavigationBar";
 
 export default function Dashboard() {
@@ -16,26 +15,43 @@ export default function Dashboard() {
         useMap();
 
     const [open, setOpen] = useState(false);
-    const incidents = useGetIncidents();
+    const { incidents, setIncidents } = useGetIncidents();
+
+    useEffect(() => {
+        const incidentListener = supabase
+            .channel("supabase_realtime:incidents")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                },
+                (payload) => {
+                    if (payload.eventType === "DELETE") {
+                        setIncidents((prevIncidents) =>
+                            prevIncidents.filter(
+                                (incident) => incident.id !== payload.old.id
+                            )
+                        );
+                    } else {
+                        setIncidents(
+                            (prevIncidents) =>
+                                [...prevIncidents, payload.new] as any[]
+                        );
+                    }
+                }
+            )
+            .subscribe();
+
+        return () => {
+            incidentListener.unsubscribe();
+        };
+    }, []);
 
     useEffect(() => {
         if (currentLocation) {
             initMap(currentLocation);
         }
-        // if (currentLocation) {
-        //     getCords("Tirupati Aakruti Greenz").then((cords) => {
-        //         console.log(currentLocation, cords);
-        //         getDirection(
-        //             {
-        //                 lng: currentLocation.longitude,
-        //                 lat: currentLocation.latitude,
-        //             },
-        //             cords
-        //         ).then((data) => {
-        //             console.log(data);
-        //         });
-        //     });
-        // }
     }, [currentLocation]);
 
     useEffect(() => {
