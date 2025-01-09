@@ -126,8 +126,7 @@ function IncidentCard({ incident }: { incident: Incident }) {
   );
 }
 
-function IncidentFeed({ incidents }: { incidents: Incident[] }) {
-  incidents = incidents || mockIncidents;
+function IncidentFeed({ incidents }: { incidents: Incident[] }) {;
   return (
     <div className="bg-background border rounded-lg h-full flex flex-col">
       <div className="flex items-center justify-between p-4 border-b">
@@ -155,6 +154,17 @@ function MapView() {
 }
 
 export default function Dashboard() {
+  const [incidents, setIncidents] = React.useState<Incident[]>([]);
+
+  React.useEffect(() => {
+    async function fetchIncidents() {
+      const response = await fetch("/api/incident");
+      const data = await response.json();
+      setIncidents(data);
+    }
+
+    fetchIncidents();
+  }, []);
   return (
     <div className="h-full w-full p-4">
       <div className="grid lg:grid-cols-5 gap-4 h-full">
@@ -162,7 +172,7 @@ export default function Dashboard() {
           <MapView />
         </div>
         <div className="lg:col-span-2 h-full">
-          <IncidentFeed incidents={mockIncidents} />
+          <IncidentFeed incidents={incidents} />
         </div>
       </div>
     </div>
