@@ -10,6 +10,7 @@ import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
 import getCords from "@/lib/getCords";
 import getDirection from "@/lib/getDirection";
 import NavigationBar from "@/components/NavigationBar";
+import Chatbot from "@/components/ui/user-dashboard/Chatbot";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
@@ -69,6 +70,7 @@ export default function Dashboard() {
                 }}
             />
             <SpeedIndicator speedLimit={60} currentSpeed={0} />
+            <Chatbot /> 
             <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
                 <button className="rounded-l-full p-2">
                     <CirclePlus size={24} onClick={zoomIn} />
