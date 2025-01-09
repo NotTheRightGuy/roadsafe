@@ -15,9 +15,6 @@ export function SpeedIndicator({
             <div className="bg-white w-10 h-10 rounded-full border flex items-center justify-center font-semibold shadow text-lg">
                 {currentSpeed}
             </div>
-            <div className="flex bg-white h-10 border shadow text-lg items-center px-2 font-semibold rounded-full">
-                /<p>{speedLimit}</p>
-            </div>
         </div>
     );
 }
