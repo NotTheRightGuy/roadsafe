@@ -45,6 +45,12 @@ export default function Dashboard() {
 
     return (
         <div id="map" className="relative h-full">
+            <div className="h-32 w-full fixed top-0 z-10 flex justify-center items-center p-2">
+                <div className="size-full bg-white rounded-lg border"></div>
+            </div>
+
+            {/*  */}
+
             <AlertIcon
                 onClick={() => {
                     setOpen(true);
