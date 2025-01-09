@@ -9,21 +9,25 @@ import {
 function Section2() {
   // Data for the cards
   const impactData = [
-    { icon: Hand, heading: "15,00,000", description: "incident reported" },
+    {
+      icon: Hand,
+      heading: "Real-Time Reporting",
+      description: "Empowering users to report incidents instantly",
+    },
     {
       icon: Clock,
-      heading: "35%",
-      description: "reduction in average response time",
+      heading: "Faster Response",
+      description: "Streamlined processes to minimize delays",
     },
     {
       icon: CheckCircle,
-      heading: "65%",
-      description: "of reported cases resolved",
+      heading: "High Resolution Rate",
+      description: "Efficiently addressing reported cases",
     },
     {
       icon: AlertTriangle,
-      heading: "15,00,000",
-      description: "incident reported",
+      heading: "Proactive Alerts",
+      description: "Preventing issues before they escalate",
     },
   ];
 

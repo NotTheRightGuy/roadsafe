@@ -8,7 +8,7 @@ export default function Section3() {
       </div>
 
       <section className="relative h-[50vh] flex items-center px-6">
-        <span className="absolute text-primary opacity-20 text-[12rem] font-bold left-6">
+        <span className="absolute bg-gradient-to-b from-red-600 to-pink-600 bg-clip-text text-transparent  text-[12rem] font-bold left-6">
           1
         </span>
         <div className="max-w-xl ml-32">
@@ -31,13 +31,13 @@ export default function Section3() {
             for accident management.
           </p>
         </div>
-        <span className="absolute text-primary opacity-20 text-[12rem] font-bold right-6">
+        <span className="absolute bg-gradient-to-bl from-red-600 to-pink-600 bg-clip-text text-transparent  text-[12rem] font-bold right-6">
           2
         </span>
       </section>
 
       <section className="relative h-[50vh] flex items-center px-6">
-        <span className="absolute text-primary opacity-20 text-[12rem] font-bold left-6">
+        <span className="absolute bg-gradient-to-bl from-red-600 to-pink-600 bg-clip-text text-transparent  text-[12rem] font-bold left-6">
           3
         </span>
         <div className="max-w-xl ml-32">
@@ -60,7 +60,7 @@ export default function Section3() {
             emergency services take action.
           </p>
         </div>
-        <span className="absolute text-primary opacity-20 text-[12rem] font-bold right-6">
+        <span className="absolute bg-gradient-to-bl from-red-600 to-pink-600 bg-clip-text text-transparent  text-[12rem] font-bold right-6">
           4
         </span>
       </section>
