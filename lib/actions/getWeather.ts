@@ -1,8 +1,8 @@
-"use server"
+"use server";
 
-import { fetchWeather } from "@/lib/weather"
+import { fetchWeather } from "@/lib/weather";
 
 export async function getWeather(latitude: number, longitude: number) {
-	const weather = await fetchWeather(latitude, longitude)
-	return weather
+    const weather = await fetchWeather(latitude, longitude);
+    return weather;
 }
