@@ -1,6 +1,6 @@
 "use client"
 import { createContext, useContext, ReactNode } from "react";
-import { useLocation, Location } from "@/hooks/location";
+import { useLocation, Location } from "@/hooks/useLocation";
 
 type LocationContextType = {
 	currentLocation: Location | null;
