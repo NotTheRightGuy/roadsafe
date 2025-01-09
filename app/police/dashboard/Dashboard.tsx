@@ -15,41 +15,6 @@ export interface Incident {
   reported_by: string;
 }
 
-const mockIncidents: Incident[] = [
-  {
-    id: "1",
-    incident_type: "road_closure",
-    created_at: "2023-01-09T15:03:03.733+00:00",
-    latitude: 37.7749,
-    longitude: -122.4194,
-    reported_by: "John Doe",
-  },
-  {
-    id: "2",
-    incident_type: "pothole",
-    created_at: "2024-01-09T15:03:03.733+00:00",
-    latitude: 34.0522,
-    longitude: -118.2437,
-    reported_by: "Jane Doe",
-  },
-  {
-    id: "3",
-    incident_type: "low_visibility",
-    created_at: "2025-01-09T15:03:03.733+00:00",
-    latitude: 40.7128,
-    longitude: -74.0060,
-    reported_by: "John Doe",
-  },
-  {
-    id: "4",
-    incident_type: "crash",
-    created_at: "2024-01-09T15:03:03.733+00:00",
-    latitude: 41.8781,
-    longitude: -87.6298,
-    reported_by: "Jane Doe",
-  },
-];
-
 type incidentType = "road_closure" | "pothole" | "crash" | "obstacle" | "stalled_vehicle" | "under_construction" | "low_visibility" | "slippery_road"
 
 async function reverseGeocode(lat: number, lon: number): Promise<string> {

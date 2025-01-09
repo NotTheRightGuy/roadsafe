@@ -14,6 +14,5 @@ export default async function PostPage({ params }: IncidentPageProps) {
 	if (error || data.length === 0) {
 		return notFound()
 	}
-	console.log(data)
 	return <IncidentDetails incident={data[0]} />;
 }
