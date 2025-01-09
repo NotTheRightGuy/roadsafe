@@ -1,4 +1,4 @@
-import { GlassWater } from "lucide-react";
+import { Waves } from "lucide-react";
 
 export default function SlipperyMarker() {
 	return (
@@ -6,7 +6,7 @@ export default function SlipperyMarker() {
 			className="bg-white p-2 rounded-full border border-black"
 			title="Slippery"
 		>
-			<GlassWater size={20} />
+			<Waves size={20} />
 		</div>
 	);
 }

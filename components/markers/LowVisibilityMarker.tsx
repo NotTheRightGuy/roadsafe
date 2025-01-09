@@ -1,4 +1,4 @@
-import { EyeClosed } from "lucide-react";
+import { EyeOff } from "lucide-react";
 
 export default function LowVisibilityMarker() {
 	return (
@@ -6,7 +6,7 @@ export default function LowVisibilityMarker() {
 			className="bg-white p-2 rounded-full border border-black"
 			title="LowVisibility"
 		>
-			<EyeClosed size={20} />
+			<EyeOff size={20} />
 		</div>
 	);
 }

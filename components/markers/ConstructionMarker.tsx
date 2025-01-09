@@ -1,4 +1,4 @@
-import { Construction } from "lucide-react";
+import { Building } from "lucide-react";
 
 export default function ConstructionMarker() {
 	return (
@@ -6,7 +6,7 @@ export default function ConstructionMarker() {
 			className="bg-white p-2 rounded-full border border-black"
 			title="Construction"
 		>
-			<Construction size={20} />
+			<Building size={20} />
 		</div>
 	);
 }
