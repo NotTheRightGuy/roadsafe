@@ -3,7 +3,7 @@ import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLocationContext } from "./LocationContext";
+import { useLocationContext } from "@/context/LocationContext";
 import NavigationBar from "./NavigationBar";
 
 export function isHazardousWeather(weather: Weather): boolean {
@@ -75,7 +75,6 @@ const WeatherDisplaySkeleton: React.FC = () => {
 
             <div className="mb-4">
                 <div className="h-10 bg-gray-200 rounded w-24 mb-2"></div>
-                {/* <div className="h-4 bg-gray-200 rounded w-48"></div> */}
             </div>
 
             <div className="mb-4 flex items-center">
@@ -109,7 +108,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
                     </h2>
                     <p className="text-gray-600">{weather.description}</p>
                 </div>
-                <Image
+                <img
                     src={weather.iconURL}
                     alt={weather.description}
                     className="w-16 h-16"
@@ -120,9 +119,6 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
                 <p className="text-4xl font-bold text-gray-800">
                     {weather.currentTemp}°C
                 </p>
-                {/* <p className="text-gray-600">
-					Min: {weather.minTemp}°C | Max: {weather.maxTemp}°C
-				</p> */}
             </div>
 
             <div className="mb-4 flex items-center">
