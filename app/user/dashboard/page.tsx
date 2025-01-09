@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useMap } from "@/context/MapContext";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import { AccidentMarker, PotholeMarker } from "@/components/markers";
+import { AccidentMarker, PotholeMarker, ConstructionMarker, LowVisibilityMarker, ObstacleMarker, RoadClosureMarker, SlipperyMarker, StalledMarker } from "@/components/markers";
 import AlertIcon from "@/components/AlertIcon";
 import useGetIncidents from "@/hooks/useGetIncidents";
 import { AlertDrawer } from "@/components/AlertDrawer";
@@ -44,21 +44,38 @@ export default function Dashboard() {
     useEffect(() => {
         if (map != null) {
             incidents.forEach((incident) => {
-                if (incident.incident_type.toLowerCase() === "accident")
-                    addMarker(
-                        incident.longitude,
-                        incident.latitude,
-                        map,
-                        AccidentMarker
-                    );
-                else if (incident.incident_type.toLowerCase() === "pothole")
-                    addMarker(
-                        incident.longitude,
-                        incident.latitude,
-                        map,
-                        PotholeMarker
-                    );
-                else addMarker(incident.longitude, incident.latitude, map);
+                let marker: (() => JSX.Element) | null = null
+                switch (incident.incident_type.toLowerCase()) {
+                    case "crash":
+                        marker = AccidentMarker
+                        break
+                    case "pothole":
+                        marker = PotholeMarker
+                        break
+                    case "road_closure":
+                        marker = RoadClosureMarker
+                        break
+                    case "construction":
+                        marker = ConstructionMarker 
+                        break
+                    case "low_visibility":
+                        marker = LowVisibilityMarker
+                        break
+                    case "obstacle":
+                        marker = ObstacleMarker
+                        break
+                    case "slippery":
+                        marker = SlipperyMarker
+                        break
+                    case "stalled":
+                        marker = StalledMarker
+                        break
+                }
+                if (marker) {
+                    addMarker(incident.longitude, incident.latitude, map, marker)
+                } else {
+                    addMarker(incident.longitude, incident.latitude, map)
+                }
             });
         }
     }, [map, incidents]);

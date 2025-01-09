@@ -6,7 +6,7 @@ export default function AccidentMarker() {
             className="bg-white p-2 rounded-full border border-black"
             title="Accident"
         >
-            <Ambulance size={24} />
+            <Ambulance size={20} />
         </div>
     );
 }
