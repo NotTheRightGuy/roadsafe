@@ -6,51 +6,51 @@ import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocationContext } from "./LocationContext";
 export function isHazardousWeather(weather: Weather): boolean {
-    const HAZARDOUS_WEATHER = [
-        "Thunderstorm",
-        "Tornado",
-        "Squall",
-        "Mist",
-        "Smoke",
-        "Fog",
-        "Haze",
-        "Dust",
-        "Sand",
-    ];
+	const HAZARDOUS_WEATHER = [
+		"Thunderstorm",
+		"Tornado",
+		"Squall",
+		"Mist",
+		"Smoke",
+		"Fog",
+		"Haze",
+		"Dust",
+		"Sand",
+	];
 
-    const HAZARDOUS_DESCRIPTION = [
-        "light intensity drizzle",
-        "drizzle",
-        "heavy intensity drizzle",
-        "freezing rain",
-        "blizzard",
-    ];
+	const HAZARDOUS_DESCRIPTION = [
+		"light intensity drizzle",
+		"drizzle",
+		"heavy intensity drizzle",
+		"freezing rain",
+		"blizzard",
+	];
 
-    // Check for hazardous weather conditions
-    if (
-        HAZARDOUS_WEATHER.includes(weather.main) ||
-        HAZARDOUS_DESCRIPTION.includes(weather.description.toLowerCase())
-    ) {
-        return true;
-    }
+	// Check for hazardous weather conditions
+	if (
+		HAZARDOUS_WEATHER.includes(weather.main) ||
+		HAZARDOUS_DESCRIPTION.includes(weather.description.toLowerCase())
+	) {
+		return true;
+	}
 
-    // Check if there is heavy rain or snow
-    if (
-        (weather.rain && weather.rain > 5) ||
-        (weather.snow && weather.snow > 5)
-    ) {
-        return true;
-    }
+	// Check if there is heavy rain or snow
+	if (
+		(weather.rain && weather.rain > 5) ||
+		(weather.snow && weather.snow > 5)
+	) {
+		return true;
+	}
 
-    // Check for strong wind
-    if (weather.windSpeed > 15) {
-        return true;
-    }
+	// Check for strong wind
+	if (weather.windSpeed > 15) {
+		return true;
+	}
 
-    // Check for extreme temperatures (freezing or very hot)
-    if (weather.currentTemp < 0 || weather.currentTemp > 35) {
-        return true;
-    }
+	// Check for extreme temperatures (freezing or very hot)
+	if (weather.currentTemp < 0 || weather.currentTemp > 35) {
+		return true;
+	}
 
 	// Check for AQI levels
 	if (weather.aqi > 150) {
@@ -62,15 +62,15 @@ export function isHazardousWeather(weather: Weather): boolean {
 }
 
 const WeatherDisplaySkeleton: React.FC = () => {
-    return (
-        <div className="bg-white shadow-lg rounded-lg p-6 max-w-sm mx-auto animate-pulse">
-            <div className="flex items-center justify-between mb-4">
-                <div>
-                    <div className="h-6 bg-gray-200 rounded w-24 mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-32"></div>
-                </div>
-                <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
-            </div>
+	return (
+		<div className="bg-white shadow-lg rounded-lg p-6 max-w-sm mx-auto animate-pulse">
+			<div className="flex items-center justify-between mb-4">
+				<div>
+					<div className="h-6 bg-gray-200 rounded w-24 mb-2"></div>
+					<div className="h-4 bg-gray-200 rounded w-32"></div>
+				</div>
+				<div className="w-16 h-16 bg-gray-200 rounded-full"></div>
+			</div>
 
 			<div className="mb-4">
 				<div className="h-10 bg-gray-200 rounded w-24 mb-2"></div>
@@ -82,20 +82,20 @@ const WeatherDisplaySkeleton: React.FC = () => {
 				<div className="h-4 bg-gray-200 rounded w-32"></div>
 			</div>
 
-            <div className="grid grid-cols-2 gap-4">
-                {[...Array(4)].map((_, index) => (
-                    <div key={index} className="flex items-center">
-                        <div className="w-5 h-5 bg-gray-200 rounded-full mr-2"></div>
-                        <div className="h-4 bg-gray-200 rounded w-24"></div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+			<div className="grid grid-cols-2 gap-4">
+				{[...Array(4)].map((_, index) => (
+					<div key={index} className="flex items-center">
+						<div className="w-5 h-5 bg-gray-200 rounded-full mr-2"></div>
+						<div className="h-4 bg-gray-200 rounded w-24"></div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
 };
 
 interface WeatherDisplayProps {
-    weather: Weather;
+	weather: Weather;
 }
 
 const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
@@ -152,28 +152,28 @@ export function LiveWeather() {
 	const location = locationCtx?.currentLocation
 	const [weather, setWeather] = useState<Weather | null>(null);
 
-    useEffect(() => {
-        async function fetchData() {
-            if (!location) {
-                return;
-            }
-            const weatherData = await getWeather(
-                location.latitude,
-                location.longitude
-            );
-            setWeather(weatherData);
-        }
-        fetchData();
-    }, [location]);
+	useEffect(() => {
+		async function fetchData() {
+			if (!location) {
+				return;
+			}
+			const weatherData = await getWeather(
+				location.latitude,
+				location.longitude
+			);
+			setWeather(weatherData);
+		}
+		fetchData();
+	}, [location]);
 
-    if (!weather) {
-        return <WeatherDisplaySkeleton />;
-    }
+	if (!weather) {
+		return <WeatherDisplaySkeleton />;
+	}
 
-    return (
-        <>
-            <WeatherDisplay weather={weather} />
-            Harardous: {isHazardousWeather(weather) ? "Yes" : "No"}
-        </>
-    );
+	return (
+		<>
+			<WeatherDisplay weather={weather} />
+			Harardous: {isHazardousWeather(weather) ? "Yes" : "No"}
+		</>
+	);
 }
