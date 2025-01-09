@@ -21,6 +21,7 @@ import NavigationBar from "@/components/NavigationBar";
 import Chatbot from "@/components/ui/user-dashboard/Chatbot";
 import { useLocationContext } from "@/context/LocationContext";
 import { useSpeedLimit } from "@/hooks/useSpeedLimit";
+import { Incident } from "@/app/police/dashboard/Dashboard";
 import ChatDrawer from "@/components/ui/ChatDrawer";
 
 export default function Dashboard() {
@@ -107,34 +108,36 @@ export default function Dashboard() {
     }
   }, [map, incidents]);
 
-  return (
-    <div id="map" className="relative h-full">
-      <NavigationBar />
-      <AlertIcon
-        onClick={() => {
-          setOpen(true);
-        }}
-      />
-      <SpeedIndicator speedLimit={60} currentSpeed={0} />
-      <Chatbot
+
+  const [incidentsOnRoute, setIncidentsOnRoute] = useState<Incident[]>([]);
+
+    return (
+        <div id="map" className="relative h-full">
+            <NavigationBar setIncidentsOnRoute={setIncidentsOnRoute} />
+            <AlertIcon
+                onClick={() => {
+                    setOpen(true);
+                }}
+            />
+            <SpeedIndicator speedLimit={60} currentSpeed={0} />
+            <Chatbot
         onClick={() => {
           setChatOpen(true);
         }}
       />
-      <SpeedIndicator
-        speedLimit={speedLimit.limit}
-        currentSpeed={location?.currentLocation?.speed ?? 0}
-      />
-      <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
-        <button className="rounded-l-full p-2">
-          <CirclePlus size={24} onClick={zoomIn} />
-        </button>
-        <button className="rounded-r-full">
-          <CircleMinus size={24} onClick={zoomOut} />
-        </button>
-      </div>
-      <AlertDrawer open={open} setOpen={setOpen} key={"danger-drawer"} />
-      <ChatDrawer open={chatopen} setOpen={setChatOpen} key={"chat-drawer"} />
-    </div>
-  );
+            <SpeedIndicator
+                speedLimit={speedLimit.limit}
+                currentSpeed={location?.currentLocation?.speed ?? 0}
+            />
+            <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
+                <button className="rounded-l-full p-2">
+                    <CirclePlus size={24} onClick={zoomIn} />
+                </button>
+                <button className="rounded-r-full">
+                    <CircleMinus size={24} onClick={zoomOut} />
+                </button>
+            </div>
+            <AlertDrawer open={open} setOpen={setOpen} />
+        </div>
+    );;
 }
