@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { OlaMaps } from "@/mapsSDK";
 import { CirclePlus, CircleMinus } from "lucide-react";
 
-export default function () {
+export default function UserDashboard() {
     const [map, setMap] = useState<any>(null);
     const olaMaps = new OlaMaps({
         apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
