@@ -12,6 +12,7 @@ import { Droplet, Droplets, Search, Wind } from "lucide-react";
 import { jakarta } from "@/app/layout";
 import { WindIcon } from "./ui/wind";
 import Logo from "./ui/Logo";
+import { MapPinIcon } from "./markers";
 
 const NavigationBar: React.FC = () => {
   const { map, addMarker } = useMap();
@@ -46,7 +47,9 @@ const NavigationBar: React.FC = () => {
     setShowModal(false);
 
     if (map && currentlocation && location) {
-      addMarker(location.lng, location.lat, map);
+      addMarker(location.lng, location.lat, map, () => (
+        <MapPinIcon className="bg-transparent" />
+      ));
 
       fitMapToLocations(
         {
