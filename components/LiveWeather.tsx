@@ -26,6 +26,7 @@ export function LiveWeather() {
 
 	return (
 		<div className="">
+			<img src={weather.iconURL} alt="weather icon" />
 			{weather.main}<br />
 			{weather.description}
 		</div>
