@@ -8,10 +8,15 @@ import useGetIncidents from "@/hooks/useGetIncidents";
 import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
 import NavigationBar from "@/components/NavigationBar";
+import { useLocationContext } from "@/context/LocationContext";
+import { useSpeedLimit } from "@/hooks/useSpeedLimit";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
         useMap();
+
+    const location = useLocationContext();
+    const speedLimit = useSpeedLimit()
 
     const [open, setOpen] = useState(false);
     const incidents = useGetIncidents();
@@ -66,7 +71,7 @@ export default function Dashboard() {
                     setOpen(true);
                 }}
             />
-            <SpeedIndicator speedLimit={60} currentSpeed={0} />
+            <SpeedIndicator speedLimit={speedLimit.limit} currentSpeed={location?.currentLocation?.speed ?? 0} />
             <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
                 <button className="rounded-l-full p-2">
                     <CirclePlus size={24} onClick={zoomIn} />
