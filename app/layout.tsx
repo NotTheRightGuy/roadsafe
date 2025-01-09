@@ -1,19 +1,10 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+import type { Metadata } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { MapProvider } from "@/context/MapContext";
 import { LocationProvider } from "@/components/LocationContext";
 
-const geistSans = localFont({
-    src: "./fonts/GeistVF.woff",
-    variable: "--font-geist-sans",
-    weight: "100 900",
-});
-const geistMono = localFont({
-    src: "./fonts/GeistMonoVF.woff",
-    variable: "--font-geist-mono",
-    weight: "100 900",
-});
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
     title: "RoadSafe by Chill Guys",
@@ -27,9 +18,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
+            <body className={`${jakarta.className} antialiased h-full w-full`}>
                 <LocationProvider>
                     <MapProvider>{children}</MapProvider>
                 </LocationProvider>
