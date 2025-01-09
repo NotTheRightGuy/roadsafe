@@ -7,5 +7,6 @@ import ObstacleMarker from "./ObstacleMarker";
 import RoadClosureMarker from "./RoadClosureMarker";
 import SlipperyMarker from "./SlipperyMarker";
 import StalledMarker from "./StalledMarker";
+import { MapPinIcon } from "./DestinationMarker";
 
-export { AccidentMarker, PotholeMarker, CurrentMarker, ConstructionMarker, LowVisibilityMarker, ObstacleMarker, RoadClosureMarker, SlipperyMarker, StalledMarker };
+export { AccidentMarker, PotholeMarker, CurrentMarker, ConstructionMarker, LowVisibilityMarker, ObstacleMarker, RoadClosureMarker, SlipperyMarker, StalledMarker, MapPinIcon };

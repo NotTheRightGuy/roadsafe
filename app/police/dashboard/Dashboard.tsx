@@ -18,6 +18,7 @@ import {
 } from "@/components/markers";
 import useGetIncidents from "@/hooks/useGetIncidents";
 import { supabase } from "@/lib/supabase";
+import { cn } from "@/lib/utils";
 
 export interface Incident {
   id: string;
@@ -57,7 +58,15 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
   }
 }
 
-function IncidentCard({ incident }: { incident: Incident }) {
+function IncidentCard({
+  incident,
+  className,
+  onClick,
+}: {
+  incident: Incident;
+  className: string;
+  onClick: any;
+}) {
   const [location, setLocation] = React.useState("Loading location...");
   React.useEffect(() => {
     reverseGeocode(incident.latitude, incident.longitude).then(setLocation);
@@ -85,7 +94,13 @@ function IncidentCard({ incident }: { incident: Incident }) {
   );
 
   return (
-    <div className="flex items-center justify-between p-4 border-b">
+    <div
+      className={cn(
+        "flex items-center justify-between p-4 border-b",
+        className
+      )}
+      onClick={onClick}
+    >
       <div className="space-y-1">
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
@@ -123,6 +138,11 @@ function IncidentCard({ incident }: { incident: Incident }) {
 }
 
 function IncidentFeed({ incidents }: { incidents: any }) {
+  const { map } = useMap();
+  function handleClick(incident: any) {
+    console.log(incident);
+    map?.setCenter([incident.longitude, incident.latitude]);
+  }
   return (
     <div className="bg-background border rounded-lg h-full flex flex-col">
       <div className="flex items-center justify-between p-4 border-b">
@@ -130,7 +150,12 @@ function IncidentFeed({ incidents }: { incidents: any }) {
       </div>
       <div className="divide-y overflow-y-auto flex-1">
         {incidents.map((incident: any) => (
-          <IncidentCard key={incident.id} incident={incident} />
+          <IncidentCard
+            key={incident.id}
+            incident={incident}
+            className="cursor-pointer hover:bg-zinc-100"
+            onClick={() => handleClick(incident)}
+          />
         ))}
       </div>
     </div>
