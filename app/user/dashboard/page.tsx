@@ -1,14 +1,19 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMap } from "@/context/MapContext";
 import { CirclePlus, CircleMinus } from "lucide-react";
 import { ReportIcon, SpeedIndicator } from "@/components/ui/user-dashboard/bottomicons";
 import { AccidentMarker, PotholeMarker } from "@/components/markers";
+import AlertIcon from "@/components/AlertIcon";
 import useGetIncidents from "@/hooks/useGetIncidents";
+import { AlertDrawer } from "@/components/AlertDrawer";
+import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
         useMap();
+
+    const [open, setOpen] = useState(false);
     const incidents = useGetIncidents();
 
     useEffect(() => {
@@ -39,18 +44,23 @@ export default function Dashboard() {
         }
     }, [map, incidents]);
 
-  return (
-    <div id="map" className="relative h-full">
-      <ReportIcon />
-      <SpeedIndicator speedLimit={50} currentSpeed={40} />
-      <div className="*:p-2 fixed top-2 left-2 *:bg-white *:shadow-md z-10">
-        <button className="rounded-l-full p-2">
-          <CirclePlus size={24} onClick={zoomIn} />
-        </button>
-        <button className="rounded-r-full">
-          <CircleMinus size={24} onClick={zoomOut} />
-        </button>
-      </div>
-    </div>
-  );
+    return (
+        <div id="map" className="relative h-full">
+            <AlertIcon
+                onClick={() => {
+                    setOpen(true);
+                }}
+            />
+            <SpeedIndicator speedLimit={60} currentSpeed={40} />
+            <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
+                <button className="rounded-l-full p-2">
+                    <CirclePlus size={24} onClick={zoomIn} />
+                </button>
+                <button className="rounded-r-full">
+                    <CircleMinus size={24} onClick={zoomOut} />
+                </button>
+            </div>
+            <AlertDrawer open={open} setOpen={setOpen} />
+        </div>
+    );
 }
