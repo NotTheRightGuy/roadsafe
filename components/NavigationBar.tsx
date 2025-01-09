@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, SetStateAction } from "react";
 import { getWeather } from "@/lib/actions/getWeather";
 import { useLocationContext } from "@/context/LocationContext";
 import { Weather } from "@/lib/weather";
@@ -12,8 +12,11 @@ import { Droplet, Droplets, Search, Wind } from "lucide-react";
 import { jakarta } from "@/app/layout";
 import { WindIcon } from "./ui/wind";
 import Logo from "./ui/Logo";
+import { Incident } from "@/app/police/dashboard/Dashboard";
+import { haversine } from "@/lib/distance";
+import polylineModule from "@mapbox/polyline"
 
-const NavigationBar: React.FC = () => {
+const NavigationBar: React.FC = ({setIncidentsOnRoute} : {setIncidentsOnRoute: any) => {
   const { map, addMarker } = useMap();
   const locationCtx = useLocationContext();
   const currentlocation = locationCtx?.currentLocation;
@@ -21,6 +24,36 @@ const NavigationBar: React.FC = () => {
   const [destination, setDestination] = useState("");
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [polyline, setPolyline] = useState<string | null>(null);
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+
+  useEffect(() => {
+    const fetchIncidents = async () => {
+      const resp = await fetch("/api/incident");
+      if (resp.ok) {
+        const data = await resp.json();
+        setIncidents(data);
+      }
+    }
+    fetchIncidents()
+  }, []);
+
+  useEffect(() => {
+    if (!polyline || !incidents) return;
+    const routeCoords = polylineModule.decode(polyline);
+    const incidentsEnRoute: Set<Incident> = new Set();
+    routeCoords.forEach((coord) => {
+      const [lng, lat] = coord;
+      incidents.forEach((incident) => {
+        const dist = haversine(lat, lng, incident.longitude, incident.latitude);
+        if (dist <= 1) {
+          incidentsEnRoute.add(incident);
+        }
+      });
+    })
+    console.log(incidentsEnRoute);
+    setIncidentsOnRoute(Array.from(incidentsEnRoute));
+  }, [polyline, incidents])
 
   const fitMapToLocations = (
     currentLocation: { latitude: number; longitude: number },
@@ -66,6 +99,7 @@ const NavigationBar: React.FC = () => {
           lat: currentlocation.latitude,
         }
       ).then((data) => {
+        setPolyline(data.routes[0].overview_polyline as string)
         map.addSource("route", {
           type: "geojson",
           data: {

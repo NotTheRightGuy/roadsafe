@@ -20,6 +20,7 @@ import { supabase } from "@/lib/supabase";
 import NavigationBar from "@/components/NavigationBar";
 import { useLocationContext } from "@/context/LocationContext";
 import { useSpeedLimit } from "@/hooks/useSpeedLimit";
+import { Incident } from "@/app/police/dashboard/Dashboard";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
@@ -112,9 +113,12 @@ export default function Dashboard() {
         }
     }, [map, incidents]);
 
+
+  const [incidentsOnRoute, setIncidentsOnRoute] = useState<Incident[]>([]);
+
     return (
         <div id="map" className="relative h-full">
-            <NavigationBar />
+            <NavigationBar setIncidentsOnRoute={setIncidentsOnRoute} />
             <AlertIcon
                 onClick={() => {
                     setOpen(true);
