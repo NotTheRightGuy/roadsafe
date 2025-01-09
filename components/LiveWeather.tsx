@@ -5,7 +5,53 @@ import { Weather } from "@/lib/weather";
 import { Snowflake, Droplets, Wind, Cloud } from "lucide-react";
 
 import { useEffect, useState } from "react";
+export function isHazardousWeather(weather: Weather): boolean {
+	const HAZARDOUS_WEATHER = [
+		"Thunderstorm",
+		"Tornado",
+		"Squall",
+		"Mist",
+		"Smoke",
+		"Fog",
+		"Haze",
+		"Dust",
+		"Sand"
+	];
 
+	const HAZARDOUS_DESCRIPTION = [
+		"light intensity drizzle",
+		"drizzle",
+		"heavy intensity drizzle",
+		"freezing rain",
+		"blizzard"
+	];
+
+	// Check for hazardous weather conditions
+	if (
+		HAZARDOUS_WEATHER.includes(weather.main) ||
+		HAZARDOUS_DESCRIPTION.includes(weather.description.toLowerCase())
+	) {
+		return true;
+	}
+
+	// Check if there is heavy rain or snow
+	if ((weather.rain && weather.rain > 5) || (weather.snow && weather.snow > 5)) {
+		return true;
+	}
+
+	// Check for strong wind
+	if (weather.windSpeed > 15) {
+		return true;
+	}
+
+	// Check for extreme temperatures (freezing or very hot)
+	if (weather.currentTemp < 0 || weather.currentTemp > 35) {
+		return true;
+	}
+
+	// If none of the conditions are met, return false
+	return false;
+}
 const WeatherDisplaySkeleton: React.FC = () => {
 	return (
 		<div className="bg-white shadow-lg rounded-lg p-6 max-w-sm mx-auto animate-pulse">
@@ -44,7 +90,6 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 			<div className="flex items-center justify-between mb-4">
 				<div>
 					<h2 className="text-2xl font-semibold text-gray-800">{weather.main}</h2>
-					<p className="text-gray-600">{weather.description}</p>
 				</div>
 				<img src={weather.iconURL} alt={weather.description} className="w-16 h-16" />
 			</div>
@@ -75,7 +120,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 				</div>
 				<div className="flex items-center">
 					<Cloud className="w-5 h-5 text-gray-400 mr-2" />
-					<span className="text-gray-700">{weather.main}</span>
+					<span className="text-gray-700">{weather.description}</span>
 				</div>
 			</div>
 		</div>
@@ -102,6 +147,9 @@ export function LiveWeather() {
 	}
 
 	return (
-		<WeatherDisplay weather={weather} />
+		<>
+			<WeatherDisplay weather={weather} />
+			Harardous: {isHazardousWeather(weather) ? "Yes" : "No"}
+		</>
 	);
 }
