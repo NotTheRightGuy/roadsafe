@@ -1,4 +1,4 @@
-import { LiveWeather } from "@/components/LiveWeather";
+// import { LiveWeather } from "@/components/LiveWeather";
 import Section1 from "@/components/LandingPage/Section1";
 import Section2 from "@/components/LandingPage/Section2";
 

@@ -1,11 +1,11 @@
 "use client"
 import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
-import Image from "next/image";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 
 import { useEffect, useState } from "react";
-import { useLocationContext } from "./LocationContext";
+import { useLocationContext } from "../context/LocationContext";
+import { useSpeedLimit } from "@/hooks/useSpeedLimit";
 export function isHazardousWeather(weather: Weather): boolean {
 	const HAZARDOUS_WEATHER = [
 		"Thunderstorm",
@@ -107,7 +107,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 					<h2 className="text-2xl font-semibold text-gray-800">{weather.main}</h2>
 					<p className="text-gray-600">{weather.description}</p>
 				</div>
-				<Image src={weather.iconURL} alt={weather.description} className="w-16 h-16" />
+				<img src={weather.iconURL} alt={weather.description} className="w-16 h-16" />
 			</div>
 
 			<div className="mb-4">
@@ -152,6 +152,8 @@ export function LiveWeather() {
 	const locationCtx = useLocationContext();
 	const location = locationCtx?.currentLocation
 	const [weather, setWeather] = useState<Weather | null>(null);
+	const [isHazardous, setIsHazardous] = useState<boolean>(false);
+	const spd = useSpeedLimit();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -167,14 +169,22 @@ export function LiveWeather() {
 		fetchData();
 	}, [location]);
 
+	useEffect(() => {
+		if (weather) {
+			setIsHazardous(isHazardousWeather(weather));
+		}
+	}, [weather])
+
 	if (!weather) {
 		return <WeatherDisplaySkeleton />;
 	}
 
+
 	return (
 		<>
 			<WeatherDisplay weather={weather} />
-			Harardous: {isHazardousWeather(weather) ? "Yes" : "No"}
+			Harardous: {isHazardous ? "Yes" : "No"}
+			{spd.limit}
 		</>
 	);
 }
