@@ -7,8 +7,6 @@ import AlertIcon from "@/components/AlertIcon";
 import useGetIncidents from "@/hooks/useGetIncidents";
 import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
-import getCords from "@/lib/getCords";
-import getDirection from "@/lib/getDirection";
 import NavigationBar from "@/components/NavigationBar";
 
 export default function Dashboard() {
