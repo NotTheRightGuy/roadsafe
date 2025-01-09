@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { MapProvider } from "@/context/MapContext";
-import { LocationProvider } from "@/components/LocationContext";
+import { LocationProvider } from "@/context/LocationContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
