@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { FixedSizeArray } from '@/lib/fixedSizeArray';
 
 export interface Location {
@@ -11,7 +11,13 @@ export interface Location {
 
 export function useLocation(delay: number = 10000, historySize: number = 50) {
   const [location, setLocation] = useState<Location | null>(null);
-  const [history, setHistory] = useState<FixedSizeArray<Location>>(new FixedSizeArray(historySize));
+  const historyRef = useRef(new FixedSizeArray<Location>(historySize));
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+
+  useEffect(() => {
+    historyRef.current = new FixedSizeArray(historySize);
+    setUpdateTrigger(prev => prev + 1);
+  }, [historySize]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -28,12 +34,8 @@ export function useLocation(delay: number = 10000, historySize: number = 50) {
           setLocation(loc);
           
           // Append the new location to the history
-          setHistory(prevHistory => {
-            const newHistory = new FixedSizeArray<Location>(historySize);
-            prevHistory.getAll().forEach(item => newHistory.add(item));
-            newHistory.add(loc);
-            return newHistory;
-          });
+          historyRef.current.add(loc);
+          setUpdateTrigger(prev => prev + 1);
 
           console.log("Location updated:", position.coords);
         },
@@ -52,6 +54,8 @@ export function useLocation(delay: number = 10000, historySize: number = 50) {
     }
   }, [delay, historySize]);
 
-  return { currentLocation: location, locationHistory: history.getAll() };
+  const locationHistory = useMemo(() => historyRef.current.getAll(), [updateTrigger]);
+
+  return { currentLocation: location, locationHistory };
 }
 
