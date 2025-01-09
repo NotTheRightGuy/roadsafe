@@ -19,6 +19,7 @@ export interface Incident {
     reported_by: string;
 }
 
+<<<<<<< HEAD
 type incidentType =
     | "road_closure"
     | "pothole"
@@ -28,6 +29,9 @@ type incidentType =
     | "under_construction"
     | "low_visibility"
     | "slippery_road";
+=======
+type incidentType = "road_closure" | "pothole" | "crash" | "obstacle" | "stalled_vehicle" | "under_construction" | "low_visibility" | "slippery_road"
+>>>>>>> cbfe69c6a690c8e73b9d8b9b810d9375ba326528
 
 async function reverseGeocode(lat: number, lon: number): Promise<string> {
     const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
