@@ -1,35 +1,43 @@
 "use client";
-import { useState, useEffect } from "react";
-import { OlaMaps } from "@/mapsSDK";
+import { useEffect } from "react";
+import { useMap } from "@/context/MapContext";
 import { CirclePlus, CircleMinus } from "lucide-react";
 import { ReportIcon, SpeedIndicator } from "@/components/ui/user-dashboard/bottomicons";
+import { AccidentMarker, PotholeMarker } from "@/components/markers";
+import useGetIncidents from "@/hooks/useGetIncidents";
 
-export default function UserDashboard() {
-  //eslint-disable-next-line
-  const [map, setMap] = useState<any>(null);
-  const olaMaps = new OlaMaps({
-    apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-  });
+export default function Dashboard() {
+    const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
+        useMap();
+    const incidents = useGetIncidents();
 
-  useEffect(() => {
-    const myMap = olaMaps.init({
-      container: "map",
-      center: [72.5714, 23.0225],
-      zoom: 15,
-    });
-    setMap(myMap);
+    useEffect(() => {
+        if (currentLocation) {
+            initMap(currentLocation);
+        }
+    }, [currentLocation]);
 
-    document.getElementsByClassName("maplibregl-ctrl-attrib")[0].remove();
-    //esllint-disable-next-line
-  }, []);
-
-  const zoomIn = () => {
-    map.setZoom(map.getZoom() + 1);
-  };
-
-  const zoomOut = () => {
-    map.setZoom(map.getZoom() - 1);
-  };
+    useEffect(() => {
+        if (map != null) {
+            incidents.forEach((incident) => {
+                if (incident.incident_type.toLowerCase() === "accident")
+                    addMarker(
+                        incident.longitude,
+                        incident.latitude,
+                        map,
+                        AccidentMarker
+                    );
+                else if (incident.incident_type.toLowerCase() === "pothole")
+                    addMarker(
+                        incident.longitude,
+                        incident.latitude,
+                        map,
+                        PotholeMarker
+                    );
+                else addMarker(incident.longitude, incident.latitude, map);
+            });
+        }
+    }, [map, incidents]);
 
   return (
     <div id="map" className="relative h-full">
