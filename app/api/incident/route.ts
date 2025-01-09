@@ -1,8 +1,14 @@
 import { supabase } from "@/app/lib/client";
+import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        const { data, error } = await supabase.from("incidents").select("*");
+        let dbPromise = supabase.from("incidents").select("*");
+        if (request.nextUrl.searchParams.has("id")) {
+            const id = request.nextUrl.searchParams.get("id");
+            dbPromise = dbPromise.eq("id", id);
+        }
+        const { data, error } = await dbPromise
 
         if (error) throw error;
         return Response.json(data);

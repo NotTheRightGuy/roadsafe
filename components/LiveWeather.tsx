@@ -1,7 +1,6 @@
 "use client";
 import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
-import Image from "next/image";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocationContext } from "./LocationContext";
