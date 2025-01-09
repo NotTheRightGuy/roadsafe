@@ -1,32 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
-import { OlaMaps } from "@/mapsSDK";
+import { useEffect } from "react";
+import { useMap } from "@/context/MapContext";
 import { CirclePlus, CircleMinus } from "lucide-react";
 
-export default function () {
-    const [map, setMap] = useState<any>(null);
-    const olaMaps = new OlaMaps({
-        apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
-    });
+export default function Dashboard() {
+    const { map, currentLocation, initMap, zoomIn, zoomOut } = useMap();
 
     useEffect(() => {
-        const myMap = olaMaps.init({
-            container: "map",
-            center: [72.5714, 23.0225],
-            zoom: 15,
-        });
-        setMap(myMap);
-
-        document.getElementsByClassName("maplibregl-ctrl-attrib")[0].remove();
-    }, []);
-
-    const zoomIn = () => {
-        map.setZoom(map.getZoom() + 1);
-    };
-
-    const zoomOut = () => {
-        map.setZoom(map.getZoom() - 1);
-    };
+        if (currentLocation) {
+            initMap(currentLocation);
+        }
+    }, [currentLocation]);
 
     return (
         <div id="map" className="relative h-full">
