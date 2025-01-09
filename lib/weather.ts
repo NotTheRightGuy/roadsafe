@@ -13,21 +13,26 @@ export type Weather = {
 	rain: number | null
 	snow: number | null
 	windSpeed: number
+	aqi: number
 }
 
 export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
-	const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-	const resp = await fetch(url)
-	const jsonResp = await resp.json()
+	const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+	const aqiUrl = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+
+	const [weatherResp, aqiResp] = await Promise.all([fetch(weatherUrl), fetch(aqiUrl)])
+	const [weatherJson, aqiJson] = await Promise.all([weatherResp.json(), aqiResp.json()])
+
 	return {
-		main: jsonResp['weather'][0].main,
-		description: jsonResp['weather'][0].description,
-		iconURL: `http://openweathermap.org/img/wn/${jsonResp['weather'][0].icon}.png`,
-		currentTemp: jsonResp['main'].temp,
-		minTemp: jsonResp['main'].temp_min,
-		maxTemp: jsonResp['main'].temp_max,
-		rain: jsonResp['rain'] ? jsonResp['rain']['1h'] : null,
-		snow: jsonResp['snow'] ? jsonResp['snow']['1h'] : null,
-		windSpeed: jsonResp['wind'].speed
+		main: weatherJson['weather'][0].main,
+		description: weatherJson['weather'][0].description,
+		iconURL: `http://openweathermap.org/img/wn/${weatherJson['weather'][0].icon}.png`,
+		currentTemp: weatherJson['main'].temp,
+		minTemp: weatherJson['main'].temp_min,
+		maxTemp: weatherJson['main'].temp_max,
+		rain: weatherJson['rain'] ? weatherJson['rain']['1h'] : null,
+		snow: weatherJson['snow'] ? weatherJson['snow']['1h'] : null,
+		windSpeed: weatherJson['wind'].speed,
+		aqi: aqiJson['list'][0]['main']['aqi']
 	}
 }

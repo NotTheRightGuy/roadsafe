@@ -2,7 +2,7 @@
 import { useLocation } from "@/hooks/location";
 import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
-import { Snowflake, Droplets, Wind, Cloud } from "lucide-react";
+import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 
 import { useEffect, useState } from "react";
 export function isHazardousWeather(weather: Weather): boolean {
@@ -49,9 +49,15 @@ export function isHazardousWeather(weather: Weather): boolean {
 		return true;
 	}
 
+	// Check for AQI levels
+	if (weather.aqi > 150) {
+		return true
+	}
+
 	// If none of the conditions are met, return false
 	return false;
 }
+
 const WeatherDisplaySkeleton: React.FC = () => {
 	return (
 		<div className="bg-white shadow-lg rounded-lg p-6 max-w-sm mx-auto animate-pulse">
@@ -65,7 +71,12 @@ const WeatherDisplaySkeleton: React.FC = () => {
 
 			<div className="mb-4">
 				<div className="h-10 bg-gray-200 rounded w-24 mb-2"></div>
-				<div className="h-4 bg-gray-200 rounded w-48"></div>
+				{/* <div className="h-4 bg-gray-200 rounded w-48"></div> */}
+			</div>
+
+			<div className="mb-4 flex items-center">
+				<div className="w-5 h-5 bg-gray-200 rounded-full mr-2"></div>
+				<div className="h-4 bg-gray-200 rounded w-32"></div>
 			</div>
 
 			<div className="grid grid-cols-2 gap-4">
@@ -90,15 +101,21 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 			<div className="flex items-center justify-between mb-4">
 				<div>
 					<h2 className="text-2xl font-semibold text-gray-800">{weather.main}</h2>
+					<p className="text-gray-600">{weather.description}</p>
 				</div>
 				<img src={weather.iconURL} alt={weather.description} className="w-16 h-16" />
 			</div>
 
 			<div className="mb-4">
 				<p className="text-4xl font-bold text-gray-800">{weather.currentTemp}°C</p>
-				<p className="text-gray-600">
+				{/* <p className="text-gray-600">
 					Min: {weather.minTemp}°C | Max: {weather.maxTemp}°C
-				</p>
+				</p> */}
+			</div>
+
+			<div className="mb-4 flex items-center">
+				<Gauge className="w-5 h-5 text-green-500 mr-2" />
+				<span className="text-gray-700">Air Quality Index: {weather.aqi}</span>
 			</div>
 
 			<div className="grid grid-cols-2 gap-4">
@@ -120,7 +137,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 				</div>
 				<div className="flex items-center">
 					<Cloud className="w-5 h-5 text-gray-400 mr-2" />
-					<span className="text-gray-700">{weather.description}</span>
+					<span className="text-gray-700">{weather.main}</span>
 				</div>
 			</div>
 		</div>

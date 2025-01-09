@@ -6,12 +6,16 @@ export function useLocation(delay: number = 10000) {
   useEffect(() => {
     const updateLocation = () => {
       if (navigator.geolocation) {
+        console.log("fetching location...")
+        const st = new Date()
         navigator.geolocation.getCurrentPosition(
           (position) => {
             setLocation({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
+            const et = new Date()
+            console.log("location mil gayi in ", et.getTime() - st.getTime(), "ms")
           },
           (error) => {
             console.error("Error getting location:", error);
@@ -26,7 +30,7 @@ export function useLocation(delay: number = 10000) {
     const intervalId = setInterval(updateLocation, delay);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [delay]);
 
   return location;
 }
