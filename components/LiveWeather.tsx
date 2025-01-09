@@ -1,7 +1,6 @@
 "use client"
 import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
-import Image from "next/image";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -108,7 +107,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 					<h2 className="text-2xl font-semibold text-gray-800">{weather.main}</h2>
 					<p className="text-gray-600">{weather.description}</p>
 				</div>
-				<Image src={weather.iconURL} alt={weather.description} className="w-16 h-16" />
+				<img src={weather.iconURL} alt={weather.description} className="w-16 h-16" />
 			</div>
 
 			<div className="mb-4">
