@@ -7,6 +7,9 @@ import AlertIcon from "@/components/AlertIcon";
 import useGetIncidents from "@/hooks/useGetIncidents";
 import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
+import getCords from "@/lib/getCords";
+import getDirection from "@/lib/getDirection";
+import NavigationBar from "@/components/NavigationBar";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
@@ -19,6 +22,20 @@ export default function Dashboard() {
         if (currentLocation) {
             initMap(currentLocation);
         }
+        // if (currentLocation) {
+        //     getCords("Tirupati Aakruti Greenz").then((cords) => {
+        //         console.log(currentLocation, cords);
+        //         getDirection(
+        //             {
+        //                 lng: currentLocation.longitude,
+        //                 lat: currentLocation.latitude,
+        //             },
+        //             cords
+        //         ).then((data) => {
+        //             console.log(data);
+        //         });
+        //     });
+        // }
     }, [currentLocation]);
 
     useEffect(() => {
@@ -45,18 +62,13 @@ export default function Dashboard() {
 
     return (
         <div id="map" className="relative h-full">
-            <div className="h-32 w-full fixed top-0 z-10 flex justify-center items-center p-2">
-                <div className="size-full bg-white rounded-lg border"></div>
-            </div>
-
-            {/*  */}
-
+            <NavigationBar />
             <AlertIcon
                 onClick={() => {
                     setOpen(true);
                 }}
             />
-            <SpeedIndicator speedLimit={60} currentSpeed={40} />
+            <SpeedIndicator speedLimit={60} currentSpeed={0} />
             <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
                 <button className="rounded-l-full p-2">
                     <CirclePlus size={24} onClick={zoomIn} />
