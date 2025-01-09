@@ -1,7 +1,5 @@
 import { LiveWeather } from "@/components/LiveWeather";
 
-export default async function Home() {
-  return (
-    <LiveWeather />
-  );
+export default function Home() {
+    return <>This is home</>;
 }
