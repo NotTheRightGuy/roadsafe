@@ -2,13 +2,19 @@
 import { createContext, useContext, ReactNode } from "react";
 import { useLocation, Location } from "@/hooks/location";
 
-const LocationContext = createContext<Location | null>(null);
+type LocationContextType = {
+	currentLocation: Location | null;
+	locationHistory: Location[];
+};
+
+const LocationContext = createContext<LocationContextType | null>(null);
 
 export const LocationProvider = ({ children }: { children: ReactNode }) => {
-	const location = useLocation();
+	const {currentLocation, locationHistory} = useLocation();
+	const contextValue = {currentLocation, locationHistory};
 
 	return (
-		<LocationContext.Provider value={location}>
+		<LocationContext.Provider value={contextValue}>
 			{children}
 		</LocationContext.Provider>
 	);

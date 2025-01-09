@@ -145,7 +145,8 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 };
 
 export function LiveWeather() {
-	const location = useLocationContext();
+	const locationCtx = useLocationContext();
+	const location = locationCtx?.currentLocation
 	const [weather, setWeather] = useState<Weather | null>(null);
 
 	useEffect(() => {
