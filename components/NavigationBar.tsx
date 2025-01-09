@@ -3,8 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { getWeather } from "@/lib/actions/getWeather";
 import { useLocationContext } from "@/context/LocationContext";
 import { Weather } from "@/lib/weather";
-import { SearchIcon } from "lucide-react";
-import getCords from "@/lib/getCords";
+import decodePolyline from "@/lib/decodePolyline";
 import getDirection from "@/lib/getDirection";
 import { useMap } from "@/context/MapContext";
 import axios from "axios";
@@ -63,6 +62,27 @@ const NavigationBar: React.FC = () => {
                     lat: currentlocation.latitude,
                 }
             ).then((data) => {
+                map.addSource("route", {
+                    type: "geojson",
+                    data: {
+                        type: "Feature",
+                        properties: {},
+                        geometry: {
+                            type: "LineString",
+                            coordinates: decodePolyline(data),
+                        },
+                    },
+                });
+                map.addLayer({
+                    id: "route",
+                    type: "line",
+                    source: "route",
+                    layout: { "line-join": "round", "line-cap": "round" },
+                    paint: {
+                        "line-color": "#000",
+                        "line-width": 2,
+                    },
+                });
                 console.log(data);
             });
         }
@@ -91,7 +111,6 @@ const NavigationBar: React.FC = () => {
                 currentlocation.latitude,
                 currentlocation.longitude
             );
-            console.log(weatherData);
             setWeather(weatherData);
         }
         fetchData();

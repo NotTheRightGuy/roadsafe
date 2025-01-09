@@ -12,7 +12,7 @@ export default async function getDirection(
         throw new Error("API key is not defined in the environment variables");
     }
 
-    const url = `https://api.olamaps.io/routing/v1/directions?origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}&api_key=${apiKey}`;
+    const url = `https://api.olamaps.io/routing/v1/directions/basic?origin=${origin.lat},${origin.lng}&destination=${destination.lat},${destination.lng}&api_key=${apiKey}`;
 
     try {
         const response = await fetch(url, {
