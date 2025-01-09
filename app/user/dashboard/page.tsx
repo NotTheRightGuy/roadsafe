@@ -2,18 +2,21 @@
 import { useEffect, useState } from "react";
 import { useMap } from "@/context/MapContext";
 import { CirclePlus, CircleMinus } from "lucide-react";
-import { AccidentMarker, PotholeMarker } from "@/components/markers";
+import { AccidentMarker, PotholeMarker, ConstructionMarker, LowVisibilityMarker, ObstacleMarker, RoadClosureMarker, SlipperyMarker, StalledMarker } from "@/components/markers";
 import AlertIcon from "@/components/AlertIcon";
 import useGetIncidents from "@/hooks/useGetIncidents";
 import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
-import getCords from "@/lib/getCords";
-import getDirection from "@/lib/getDirection";
 import NavigationBar from "@/components/NavigationBar";
+import { useLocationContext } from "@/context/LocationContext";
+import { useSpeedLimit } from "@/hooks/useSpeedLimit";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
         useMap();
+
+    const location = useLocationContext();
+    const speedLimit = useSpeedLimit()
 
     const [open, setOpen] = useState(false);
     const incidents = useGetIncidents();
@@ -41,21 +44,38 @@ export default function Dashboard() {
     useEffect(() => {
         if (map != null) {
             incidents.forEach((incident) => {
-                if (incident.incident_type.toLowerCase() === "accident")
-                    addMarker(
-                        incident.longitude,
-                        incident.latitude,
-                        map,
-                        AccidentMarker
-                    );
-                else if (incident.incident_type.toLowerCase() === "pothole")
-                    addMarker(
-                        incident.longitude,
-                        incident.latitude,
-                        map,
-                        PotholeMarker
-                    );
-                else addMarker(incident.longitude, incident.latitude, map);
+                let marker: (() => JSX.Element) | null = null
+                switch (incident.incident_type.toLowerCase()) {
+                    case "crash":
+                        marker = AccidentMarker
+                        break
+                    case "pothole":
+                        marker = PotholeMarker
+                        break
+                    case "road_closure":
+                        marker = RoadClosureMarker
+                        break
+                    case "construction":
+                        marker = ConstructionMarker 
+                        break
+                    case "low_visibility":
+                        marker = LowVisibilityMarker
+                        break
+                    case "obstacle":
+                        marker = ObstacleMarker
+                        break
+                    case "slippery":
+                        marker = SlipperyMarker
+                        break
+                    case "stalled":
+                        marker = StalledMarker
+                        break
+                }
+                if (marker) {
+                    addMarker(incident.longitude, incident.latitude, map, marker)
+                } else {
+                    addMarker(incident.longitude, incident.latitude, map)
+                }
             });
         }
     }, [map, incidents]);
@@ -68,7 +88,7 @@ export default function Dashboard() {
                     setOpen(true);
                 }}
             />
-            <SpeedIndicator speedLimit={60} currentSpeed={0} />
+            <SpeedIndicator speedLimit={speedLimit.limit} currentSpeed={location?.currentLocation?.speed ?? 0} />
             <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
                 <button className="rounded-l-full p-2">
                     <CirclePlus size={24} onClick={zoomIn} />

@@ -4,9 +4,9 @@ export default function PotholeMarker() {
     return (
         <div
             className="bg-white p-2 rounded-full border border-black"
-            title="Accident"
+            title="Pothole"
         >
-            <Drill size={24} />
+            <Drill size={20} />
         </div>
     );
 }
