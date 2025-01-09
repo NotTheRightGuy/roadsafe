@@ -1,6 +1,6 @@
-const API_KEY = process.env.OPENWEATHER_API_KEY ?? "";
+const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY ?? "";
 if (API_KEY === "") {
-    throw new Error("OPENWEATHER_API_KEY env var not set");
+    throw new Error("NEXT_PUBLIC_OPENWEATHER_API_KEY env var not set");
 }
 
 export type Weather = {
@@ -14,6 +14,10 @@ export type Weather = {
     snow: number | null;
     windSpeed: number;
     aqi: number;
+    humidity: number;
+    precipitation: number;
+    city: string;
+    country: string;
 };
 
 export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
@@ -29,10 +33,12 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
         aqiResp.json(),
     ]);
 
+    const precipitation = (weatherJson["rain"] ? weatherJson["rain"]["1h"] : 0) + (weatherJson["snow"] ? weatherJson["snow"]["1h"] : 0);
+
     return {
         main: weatherJson["weather"][0].main,
         description: weatherJson["weather"][0].description,
-        iconURL: `http://openweathermap.org/img/wn/${weatherJson["weather"][0].icon}.png`,
+        iconURL: `http://openweathermap.org/img/wn/${weatherJson["weather"][0].icon}@2x.png`,
         currentTemp: weatherJson["main"].temp,
         minTemp: weatherJson["main"].temp_min,
         maxTemp: weatherJson["main"].temp_max,
@@ -40,5 +46,9 @@ export async function fetchWeather(lat: number, lon: number): Promise<Weather> {
         snow: weatherJson["snow"] ? weatherJson["snow"]["1h"] : null,
         windSpeed: weatherJson["wind"].speed,
         aqi: aqiJson["list"][0]["main"]["aqi"],
+        humidity: weatherJson["main"].humidity,
+        precipitation: precipitation,
+        city: weatherJson["name"],
+        country: weatherJson["sys"].country,
     };
 }

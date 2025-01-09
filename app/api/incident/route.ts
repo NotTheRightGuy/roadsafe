@@ -1,14 +1,19 @@
-import { supabase } from "@/app/lib/client";
+import { supabase } from "@/lib/supabase";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
     try {
-        let dbPromise = supabase.from("incidents").select("*");
+        let dbPromise = supabase
+            .from("incidents")
+            .select("*")
+            .order("created_at", { ascending: false });
         if (request.nextUrl.searchParams.has("id")) {
             const id = request.nextUrl.searchParams.get("id");
-            dbPromise = dbPromise.eq("id", id);
+            if (id) {
+                dbPromise = dbPromise.eq("id", id);
+            }
         }
-        const { data, error } = await dbPromise
+        const { data, error } = await dbPromise;
 
         if (error) throw error;
         return Response.json(data);
