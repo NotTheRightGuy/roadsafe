@@ -1,6 +1,7 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import DragCloseDrawer from "./ui/DragCloseDrawer";
 import { Button } from "./ui/button";
+import { useMap } from "@/context/MapContext";
 
 export const AlertDrawer = ({
     open,
@@ -9,17 +10,27 @@ export const AlertDrawer = ({
     open: boolean;
     setOpen: any;
 }) => {
+    const { olamaps, currentLocation } = useMap();
+    useEffect(() => {
+        if (open && olamaps && currentLocation) {
+            olamaps.getStaticMap(
+                `https://api.olamaps.io/tiles/v1/styles/default-light-standard/static/${currentLocation.longitude},${currentLocation.latitude},20/800x600.png?marker=${currentLocation.longitude}%2C${currentLocation.latitude}%7Cred%7Cscale%3A0.9&api_key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`,
+                "static-map"
+            );
+        }
+    }, [open, olamaps, currentLocation]);
+
     return (
         <div className="absolute inset-0 flex items-center justify-center">
             <DragCloseDrawer open={open} setOpen={setOpen}>
                 <div className="max-w-lg mx-auto p-6 bg-slate-100">
-                    {/* Header */}
                     <div className="flex items-center justify-between mb-4"></div>
 
-                    {/* Map Placeholder */}
-                    <div className="w-full h-56 bg-gray-200 rounded-lg mb-4"></div>
+                    <div
+                        className="w-full h-56 bg-gray-200 rounded-lg mb-4"
+                        id="static-map"
+                    ></div>
 
-                    {/* Location Confirmation */}
                     <div className="mb-6">
                         <p className="text-center text-sm text-gray-600 mb-3">
                             Is this location above correct?
@@ -38,7 +49,6 @@ export const AlertDrawer = ({
                         </div>
                     </div>
 
-                    {/* Report Section */}
                     <div className="mb-6">
                         <h2 className="text-base font-semibold mb-4">
                             Report an Incident
@@ -53,7 +63,6 @@ export const AlertDrawer = ({
                         </div>
                     </div>
 
-                    {/* Footer Button */}
                     <Button className="w-full" variant="outline">
                         Reporting Crash
                     </Button>

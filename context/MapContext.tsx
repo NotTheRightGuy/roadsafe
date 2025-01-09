@@ -19,6 +19,7 @@ interface MapContextProps {
     initMap: (location: { longitude: number; latitude: number }) => void;
     zoomIn: () => void;
     zoomOut: () => void;
+    olamaps?: OlaMaps | null;
     addMarker: (
         longitude: number,
         latitude: number,
@@ -101,6 +102,7 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
                 initMap,
                 zoomIn,
                 zoomOut,
+                olamaps: olaMapsRef.current,
                 addMarker,
             }}
         >
