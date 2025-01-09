@@ -5,10 +5,11 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BotMessageSquare, Send } from "lucide-react";
+import { button } from "framer-motion/client";
 
 const BACKEND_URL = "http://localhost:8000/api/process";
 
-function Chatbot() {
+function Chatbot({ ...props }) {
   const [messages, setMessages] = useState<
     { query: string; response: string }[]
   >([]);
@@ -49,46 +50,12 @@ function Chatbot() {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <div className="absolute z-20 right-2 bottom-[7.5rem] bg-purple-500 text-white flex justify-center items-center w-12 h-12 rounded-2xl shadow-lg cursor-pointer">
-          <BotMessageSquare size={24} />
-        </div>
-      </DialogTrigger>
-      <DialogContent className="flex flex-col items-center gap-4 p-4">
-        <div className="w-full flex flex-col gap-4 mt-4">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className="bg-white text-black shadow-md p-3 rounded-lg"
-            >
-              <div className="font-bold">You:</div>
-              <div className="mb-2">{message.query}</div>
-              <div className="font-bold">Bot:</div>
-              <div>{message.response}</div>
-            </div>
-          ))}
-          {loading && <div className="text-red-500">Processing...</div>}
-
-          <div className="w-full flex gap-2 px-2">
-            <Input
-              value={newQuery}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setNewQuery(e.target.value)
-              }
-              placeholder="Ask something..."
-              className="flex-1"
-            />
-            <Button
-              onClick={handleSendQuery}
-              className="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white"
-            >
-              <Send size={16} /> Send
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+    <button
+      className="absolute bottom-[7.5rem] z-20 right-2 bg-blue-500 text-white flex justify-center items-center w-12 h-12 rounded-2xl shadow-lg cursor-pointer"
+      {...props}
+    >
+      <BotMessageSquare />
+    </button>
   );
 }
 
