@@ -8,7 +8,7 @@ function Section1() {
   return (
     <div className="overflow-hidden">
       <Navbar />
-      <div className="flex h-screen w-screen flex-col items-start justify-start mt-16 px-3">
+      <div className="flex w-screen flex-col items-start justify-start mt-16 px-3">
         <h1 className="text-3xl font-extrabold tracking-tighter leading-normal">
           Helping Communities, Preventing{" "}
           <span className="text-red-600">Accidents</span>
