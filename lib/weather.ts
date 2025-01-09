@@ -1,6 +1,6 @@
-const API_KEY = process.env.OPENWEATHER_API_KEY ?? "";
+const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY ?? "";
 if (API_KEY === "") {
-    throw new Error("OPENWEATHER_API_KEY env var not set");
+    throw new Error("NEXT_PUBLIC_OPENWEATHER_API_KEY env var not set");
 }
 
 export type Weather = {
