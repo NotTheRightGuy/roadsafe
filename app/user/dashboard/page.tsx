@@ -122,7 +122,7 @@ export default function Dashboard() {
                 }}
             />
             <SpeedIndicator speedLimit={60} currentSpeed={0} />
-            <Chatbot /> 
+            <Chatbot currentLocation={currentLocation} incidents={incidents} />
             <SpeedIndicator
                 speedLimit={speedLimit.limit}
                 currentSpeed={location?.currentLocation?.speed ?? 0}
