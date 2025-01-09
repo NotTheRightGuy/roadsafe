@@ -1,13 +1,18 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMap } from "@/context/MapContext";
 import { CirclePlus, CircleMinus } from "lucide-react";
 import { AccidentMarker, PotholeMarker } from "@/components/markers";
+import AlertIcon from "@/components/AlertIcon";
 import useGetIncidents from "@/hooks/useGetIncidents";
+import { AlertDrawer } from "@/components/AlertDrawer";
+import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
         useMap();
+
+    const [open, setOpen] = useState(false);
     const incidents = useGetIncidents();
 
     useEffect(() => {
@@ -40,7 +45,13 @@ export default function Dashboard() {
 
     return (
         <div id="map" className="relative h-full">
-            <div className="*:p-2 fixed bottom-2 right-2 *:bg-white *:shadow-md z-10">
+            <AlertIcon
+                onClick={() => {
+                    setOpen(true);
+                }}
+            />
+            <SpeedIndicator speedLimit={60} currentSpeed={40} />
+            <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
                 <button className="rounded-l-full p-2">
                     <CirclePlus size={24} onClick={zoomIn} />
                 </button>
@@ -48,6 +59,7 @@ export default function Dashboard() {
                     <CircleMinus size={24} onClick={zoomOut} />
                 </button>
             </div>
+            <AlertDrawer open={open} setOpen={setOpen} />
         </div>
     );
 }
