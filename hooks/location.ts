@@ -1,35 +1,43 @@
 import { useState, useEffect } from "react";
 
+export type Location = {
+  latitude: number;
+  longitude: number;
+  speed: number | null;
+  altitude: number | null;
+  heading: number | null;
+};
+
 export function useLocation(delay: number = 10000) {
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [location, setLocation] = useState<Location | null>(null);
 
   useEffect(() => {
-    const updateLocation = () => {
-      if (navigator.geolocation) {
-        console.log("fetching location...")
-        const st = new Date()
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            setLocation({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            });
-            const et = new Date()
-            console.log("location mil gayi in ", et.getTime() - st.getTime(), "ms")
-          },
-          (error) => {
-            console.error("Error getting location:", error);
-          }
-        );
-      } else {
-        console.error("Geolocation is not supported by this browser.");
-      }
-    };
+    if (navigator.geolocation) {
+      console.log("Starting to watch location...");
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            speed: position.coords.speed,
+            altitude: position.coords.altitude,
+            heading: position.coords.heading,
+          });
+          console.log("Location updated:", position.coords);
+        },
+        (error) => {
+          console.error("Error watching location:", error);
+        },
+        { timeout: delay }
+      );
 
-    updateLocation();
-    const intervalId = setInterval(updateLocation, delay);
-
-    return () => clearInterval(intervalId);
+      return () => {
+        console.log("Stopping location watch...");
+        navigator.geolocation.clearWatch(watchId);
+      };
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   }, [delay]);
 
   return location;

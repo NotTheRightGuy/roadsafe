@@ -1,10 +1,10 @@
 "use client"
-import { useLocation } from "@/hooks/location";
 import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 
 import { useEffect, useState } from "react";
+import { useLocationContext } from "./LocationContext";
 export function isHazardousWeather(weather: Weather): boolean {
 	const HAZARDOUS_WEATHER = [
 		"Thunderstorm",
@@ -145,7 +145,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
 };
 
 export function LiveWeather() {
-	const location = useLocation();
+	const location = useLocationContext();
 	const [weather, setWeather] = useState<Weather | null>(null);
 
 	useEffect(() => {
