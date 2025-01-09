@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { MapProvider } from "@/context/MapContext";
-import { LocationProvider } from "@/components/LocationContext";
+import { LocationProvider } from "@/context/LocationContext";
 
 export const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 

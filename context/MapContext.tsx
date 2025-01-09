@@ -11,7 +11,7 @@ import {
 import { CurrentMarker } from "@/components/markers";
 import { renderToString } from "react-dom/server";
 import { OlaMaps } from "@/mapsSDK";
-import { useLocationContext } from "@/components/LocationContext";
+import { useLocationContext } from "@/context/LocationContext";
 
 interface MapContextProps {
     map: any;
