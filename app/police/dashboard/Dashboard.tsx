@@ -16,7 +16,7 @@ interface Incident {
 const mockIncidents: Incident[] = [
   {
     id: "1",
-    type: "Phone stolen by bikers",
+    type: "Ouch",
     location: "Gandhinagar",
     perpetrator: "Thief",
     severity: "Critical",
@@ -24,7 +24,7 @@ const mockIncidents: Incident[] = [
   },
   {
     id: "2",
-    type: "Phone stolen by bikers",
+    type: "NO way",
     location: "Gandhinagar",
     perpetrator: "Thief",
     severity: "Moderate",
@@ -32,7 +32,7 @@ const mockIncidents: Incident[] = [
   },
   {
     id: "3",
-    type: "Phone stolen by bikers",
+    type: "Ohoho",
     location: "Gandhinagar",
     perpetrator: "Thief",
     severity: "Low",
@@ -40,7 +40,7 @@ const mockIncidents: Incident[] = [
   },
   {
     id: "4",
-    type: "Phone stolen by bikers",
+    type: "Dead",
     location: "Gandhinagar",
     perpetrator: "Thief",
     severity: "Moderate",
@@ -81,7 +81,8 @@ function IncidentCard({ incident }: { incident: Incident }) {
   );
 }
 
-function IncidentFeed() {
+function IncidentFeed({ incidents }: { incidents: Incident[] }) {
+  incidents = incidents || mockIncidents;
   return (
     <div className="bg-background border rounded-lg h-full flex flex-col">
       <div className="flex items-center justify-between p-4 border-b">
@@ -91,7 +92,7 @@ function IncidentFeed() {
         </Button>
       </div>
       <div className="divide-y overflow-y-auto flex-1">
-        {mockIncidents.map((incident) => (
+        {incidents.map((incident) => (
           <IncidentCard key={incident.id} incident={incident} />
         ))}
       </div>
