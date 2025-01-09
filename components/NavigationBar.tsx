@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
 import { getWeather } from "@/lib/actions/getWeather";
-import { useLocationContext } from "./LocationContext";
+import { useLocationContext } from "@/context/LocationContext";
 import { Weather } from "@/lib/weather";
 import { SearchIcon } from "lucide-react";
 import getCords from "@/lib/getCords";
