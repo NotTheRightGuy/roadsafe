@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { MapProvider } from "@/context/MapContext";
 import { LocationProvider } from "@/context/LocationContext";
+import { Toaster } from "@/components/ui/toaster";
 
 export const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
                 <LocationProvider>
                     <MapProvider>{children}</MapProvider>
                 </LocationProvider>
+                <Toaster />
             </body>
         </html>
     );
