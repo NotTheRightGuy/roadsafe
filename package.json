@@ -9,11 +9,14 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@radix-ui/react-label": "^2.1.1",
         "@radix-ui/react-slot": "^1.1.1",
         "@supabase/supabase-js": "^2.47.12",
+        "axios": "^1.7.9",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "framer-motion": "^11.16.4",
+        "lodash.debounce": "^4.0.8",
         "lucide": "^0.469.0",
         "lucide-react": "^0.469.0",
         "motion": "^11.16.1",
@@ -25,6 +28,7 @@
         "tailwindcss-animate": "^1.0.7"
     },
     "devDependencies": {
+        "@types/lodash.debounce": "^4.0.9",
         "@types/node": "^20",
         "@types/react": "^18",
         "@types/react-dom": "^18",
