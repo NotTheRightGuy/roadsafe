@@ -6,7 +6,16 @@ import { Button } from "@/components/ui/button";
 import { getAgoDuration } from "@/lib/timeutils";
 import Link from "next/link";
 import { useMap } from "@/context/MapContext";
-import { AccidentMarker, PotholeMarker } from "@/components/markers";
+import {
+    AccidentMarker,
+    ConstructionMarker,
+    LowVisibilityMarker,
+    ObstacleMarker,
+    PotholeMarker,
+    RoadClosureMarker,
+    SlipperyMarker,
+    StalledMarker,
+} from "@/components/markers";
 import useGetIncidents from "@/hooks/useGetIncidents";
 import { supabase } from "@/lib/supabase";
 
@@ -19,7 +28,6 @@ export interface Incident {
     reported_by: string;
 }
 
-<<<<<<< HEAD
 type incidentType =
     | "road_closure"
     | "pothole"
@@ -29,9 +37,6 @@ type incidentType =
     | "under_construction"
     | "low_visibility"
     | "slippery_road";
-=======
-type incidentType = "road_closure" | "pothole" | "crash" | "obstacle" | "stalled_vehicle" | "under_construction" | "low_visibility" | "slippery_road"
->>>>>>> cbfe69c6a690c8e73b9d8b9b810d9375ba326528
 
 async function reverseGeocode(lat: number, lon: number): Promise<string> {
     const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
@@ -176,21 +181,43 @@ export default function Dashboard() {
     React.useEffect(() => {
         if (map != null) {
             incidents.forEach((incident) => {
-                if (incident.incident_type.toLowerCase() === "accident")
+                let marker: (() => JSX.Element) | null = null;
+                switch (incident.incident_type.toLowerCase()) {
+                    case "crash":
+                        marker = AccidentMarker;
+                        break;
+                    case "pothole":
+                        marker = PotholeMarker;
+                        break;
+                    case "road_closure":
+                        marker = RoadClosureMarker;
+                        break;
+                    case "construction":
+                        marker = ConstructionMarker;
+                        break;
+                    case "low_visibility":
+                        marker = LowVisibilityMarker;
+                        break;
+                    case "obstacle":
+                        marker = ObstacleMarker;
+                        break;
+                    case "slippery":
+                        marker = SlipperyMarker;
+                        break;
+                    case "stalled":
+                        marker = StalledMarker;
+                        break;
+                }
+                if (marker) {
                     addMarker(
                         incident.longitude,
                         incident.latitude,
                         map,
-                        AccidentMarker
+                        marker
                     );
-                else if (incident.incident_type.toLowerCase() === "pothole")
-                    addMarker(
-                        incident.longitude,
-                        incident.latitude,
-                        map,
-                        PotholeMarker
-                    );
-                else addMarker(incident.longitude, incident.latitude, map);
+                } else {
+                    addMarker(incident.longitude, incident.latitude, map);
+                }
             });
         }
     }, [map, incidents]);
