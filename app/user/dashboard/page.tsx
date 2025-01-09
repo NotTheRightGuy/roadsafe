@@ -138,6 +138,8 @@ export default function Dashboard() {
                 </button>
             </div>
             <AlertDrawer open={open} setOpen={setOpen} />
+            <ChatDrawer open={chatopen} setOpen={setChatOpen} key={"chat-drawer"} />
+
         </div>
     );;
 }

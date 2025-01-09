@@ -8,7 +8,7 @@ function ChatDrawer({ open, setOpen }: { open: boolean; setOpen: any }) {
   return (
     <div className="absolute inset-0 flex items-center justify-center">
       <DragCloseDrawer open={open} setOpen={setOpen}>
-        <ChatBot api=`${process.env.NEXT_PUBLIC_LLM_BACKEND_URL}` />
+        <ChatBot />
       </DragCloseDrawer>
     </div>
   );

@@ -1,11 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { BotMessageSquare, Send } from "lucide-react";
-import { button } from "framer-motion/client";
+
+import { BotMessageSquare } from "lucide-react";
 
 const BACKEND_URL = "http://localhost:8000/api/process";
 
