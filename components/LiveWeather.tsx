@@ -3,7 +3,7 @@ import { getWeather } from "@/lib/actions/getWeather";
 import { Weather } from "@/lib/weather";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useLocationContext } from "./LocationContext";
+import { useLocationContext } from "@/context/LocationContext";
 import NavigationBar from "./NavigationBar";
 
 export function isHazardousWeather(weather: Weather): boolean {
@@ -109,7 +109,7 @@ const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather }) => {
                     </h2>
                     <p className="text-gray-600">{weather.description}</p>
                 </div>
-                <Image
+                <img
                     src={weather.iconURL}
                     alt={weather.description}
                     className="w-16 h-16"
