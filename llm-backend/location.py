@@ -28,7 +28,7 @@ def prompt(current_location, api_response, query):
     """
     try:
         response = client.chat(
-            model="llama3.2", messages=[{"role": "user", "content": prompt}]
+            model="llama3.2:1b", messages=[{"role": "user", "content": prompt}]
         )
         print(response)
         return response.message.content
