@@ -29,6 +29,17 @@ export interface Incident {
     reported_by: string;
 }
 
+enum IncidentLabels {
+    crash = "Crash",
+    road_closure = "Road Closure",
+    pothole = "Pot Hole",
+    construction = "In Construction",
+    low_visibility = "Low Visibility",
+    obstacle = "Obstacle",
+    slippery = "Slippery Road",
+    stalled = "Stalled Vehicle",
+}
+
 type incidentType =
     | "road_closure"
     | "pothole"
@@ -118,13 +129,18 @@ function IncidentCard({
                                 : ""
                         }
                     >
-                        {severity}
+                        {
+                            IncidentLabels[
+                                incident.incident_type as keyof typeof IncidentLabels
+                            ]
+                        }
                     </Badge>
                 </div>
                 <h3 className="font-medium">{formattedTitle}</h3>
                 <p className="text-sm text-muted-foreground">
-                    {incident.reported_by} • {location}
+                    {incident.reported_by}
                 </p>
+                <p className="text-xs text-muted-foreground">{location}</p>
             </div>
             <Link href={`/police/dashboard/incident/${incident.id}`}>
                 <Button className="bg-blue-600 hover:bg-blue-700">
