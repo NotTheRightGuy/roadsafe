@@ -24,6 +24,8 @@ import { useLocationContext } from "@/context/LocationContext";
 import { Incident } from "@/app/police/dashboard/Dashboard";
 import ChatDrawer from "@/components/ui/ChatDrawer";
 import { NotificationWatcher } from "@/components/NotificationWatcher";
+import IncidentDrawer from "@/components/ui/IncidentDrawer";
+import IncidentsIcon from "@/components/ui/IncidentsIcon";
 
 export default function Dashboard() {
     const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
@@ -34,6 +36,7 @@ export default function Dashboard() {
 
     const [open, setOpen] = useState(false);
     const [chatopen, setChatOpen] = useState(false);
+    const [incidentOpen, setIncidentOpen] = useState(false);
     const { incidents, setIncidents } = useGetIncidents();
 
     useEffect(() => {
@@ -112,6 +115,12 @@ export default function Dashboard() {
 
     const [incidentsOnRoute, setIncidentsOnRoute] = useState<Incident[]>([]);
 
+    // create a map of incident type and its count
+    const incidentsMap = incidentsOnRoute.reduce((acc, incident) => {
+        acc[incident.incident_type] = (acc[incident.incident_type] ?? 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+
     return (
         <div id="map" className="relative h-full">
             <NavigationBar setIncidentsOnRoute={setIncidentsOnRoute} />
@@ -120,11 +129,17 @@ export default function Dashboard() {
                     setOpen(true);
                 }}
             />
-            <SpeedIndicator speedLimit={60} currentSpeed={0} />
+            <SpeedIndicator speedLimit={60} currentSpeed={currentLocation?.speed ?? 0} />
             <Chatbot
                 onClick={() => {
                     setChatOpen(true);
                 }}
+            />
+            <IncidentsIcon
+                onClick={() => {
+                    setIncidentOpen(true);
+                }}
+                hidden={incidentsOnRoute.length === 0}
             />
             <SpeedIndicator
                 speedLimit={120}
@@ -140,6 +155,12 @@ export default function Dashboard() {
             </div>
             <AlertDrawer open={open} setOpen={setOpen} />
             <ChatDrawer open={chatopen} setOpen={setChatOpen} key={"chat-drawer"} />
+            <IncidentDrawer
+                open={incidentOpen}
+                setOpen={setIncidentOpen}
+                key={"incident-drawer"}
+                incidents={incidentsMap}
+            />
             <NotificationWatcher incidents={incidents} />
         </div>
     )

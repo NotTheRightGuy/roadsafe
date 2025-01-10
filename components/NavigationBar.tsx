@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect, useCallback, SetStateAction, Dispatch } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import { getWeather } from "@/lib/actions/getWeather";
 import { useLocationContext } from "@/context/LocationContext";
 import { Weather } from "@/lib/weather";
@@ -10,13 +16,17 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import { Incident } from "@/app/police/dashboard/Dashboard";
 import { haversine } from "@/lib/distance";
-import polylineModule from "@mapbox/polyline"
+import polylineModule from "@mapbox/polyline";
 import { MapPinIcon } from "./markers";
 import { Droplets, Search, WindIcon } from "lucide-react";
 import { jakarta } from "@/app/layout";
 import Logo from "./ui/Logo";
 
-export function NavigationBar({ setIncidentsOnRoute }: { setIncidentsOnRoute: Dispatch<SetStateAction<Incident[]>> }) {
+export function NavigationBar({
+  setIncidentsOnRoute,
+}: {
+  setIncidentsOnRoute: Dispatch<SetStateAction<Incident[]>>;
+}) {
   const { map, addMarker } = useMap();
   const locationCtx = useLocationContext();
   const currentlocation = locationCtx?.currentLocation;
@@ -34,8 +44,8 @@ export function NavigationBar({ setIncidentsOnRoute }: { setIncidentsOnRoute: Di
         const data = await resp.json();
         setIncidents(data);
       }
-    }
-    fetchIncidents()
+    };
+    fetchIncidents();
   }, []);
 
   useEffect(() => {
@@ -50,10 +60,10 @@ export function NavigationBar({ setIncidentsOnRoute }: { setIncidentsOnRoute: Di
           incidentsEnRoute.add(incident);
         }
       });
-    })
+    });
     console.log(incidentsEnRoute);
     setIncidentsOnRoute(Array.from(incidentsEnRoute));
-  }, [polyline, incidents])
+  }, [polyline, incidents]);
 
   const fitMapToLocations = (
     currentLocation: { latitude: number; longitude: number },
@@ -107,7 +117,7 @@ export function NavigationBar({ setIncidentsOnRoute }: { setIncidentsOnRoute: Di
           lat: currentlocation.latitude,
         }
       ).then((data) => {
-        setPolyline(data.routes[0].overview_polyline as string)
+        setPolyline(data.routes[0].overview_polyline as string);
         map.addSource("route", {
           type: "geojson",
           data: {
@@ -178,17 +188,13 @@ export function NavigationBar({ setIncidentsOnRoute }: { setIncidentsOnRoute: Di
             </div>
 
             <div className="flex flex-col">
-              <div className="font-bold text-3xl">
-                {weather?.city}
-              </div>
+              <div className="font-bold text-3xl">{weather?.city}</div>
               <div>{weather?.currentTemp}&deg; C</div>
             </div>
             <div className="flex items-center justify-center gap-2 ">
               <div className="flex justify-between gap-2 items-center">
                 <WindIcon className="hover:bg-transparent text-slate-300 -ml-1" />{" "}
-                <div className="-ml-1">
-                  {weather?.windSpeed} Km/hr
-                </div>{" "}
+                <div className="-ml-1">{weather?.windSpeed} Km/hr</div>{" "}
               </div>
               <div className="flex justify-between gap-2 items-center">
                 <Droplets className="text-blue-300" />{" "}
@@ -225,13 +231,9 @@ export function NavigationBar({ setIncidentsOnRoute }: { setIncidentsOnRoute: Di
                       key={index}
                       className="p-2 cursor-pointer hover:bg-gray-200"
                       onClick={() => {
-                        setDestination(
-                          suggestion.description
-                        );
+                        setDestination(suggestion.description);
                         setSuggestions([]);
-                        handleInput(
-                          suggestion.geometry.location
-                        );
+                        handleInput(suggestion.geometry.location);
                       }}
                     >
                       {suggestion.description}

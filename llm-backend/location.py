@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from ollama import Client
 import json
-from geopy.geocoders import Nominatim
+from reverseGeoEncoding import reverseGeoEncoding
 
 app = FastAPI(title="Hazard Detection API")
 
@@ -21,7 +21,8 @@ def prompt(current_location, api_response, query):
     prompt = f"""
     You are an helpful assistant who specialises in answering users query regarding the various incidents happening around them.
     Be concise with your answer and explain it properly. It must convey the idea and points without giving extra information.
-    The user currently lives at position {current_location} 
+    Never use the raw coordinates in the answer. Always convert them to a human-readable address.
+    The user currently lives at position {reverseGeoEncoding(current_location["latitude"], current_location["longitude"])} located at {current_location}.
     These are the various incidents that has occured : {api_response}
     Answer the following question now: {query}
     """
@@ -57,6 +58,7 @@ async def health_check():
 # API endpoint to process queries
 @app.post("/api/process")
 async def process_query(query: Query):
+    print(query)
     try:
         result = prompt(query.current_position, query.api_response, query.text)
         return result
