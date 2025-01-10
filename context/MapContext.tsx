@@ -10,8 +10,8 @@ import {
 
 import { CurrentMarker } from "@/components/markers";
 import { renderToString } from "react-dom/server";
-import { OlaMaps } from "@/mapsSDK";
 import { useLocationContext } from "@/context/LocationContext";
+import { OlaMaps } from "@/mapsSDK";
 
 interface MapContextProps {
     map: any;
@@ -39,8 +39,11 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
 
     useEffect(() => {
         if (!olaMapsRef.current) {
-            olaMapsRef.current = new OlaMaps({
-                apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
+            import("@/mapsSDK").then((module) => {
+                const { OlaMaps } = module;
+                olaMapsRef.current = new OlaMaps({
+                    apiKey: process.env.NEXT_PUBLIC_MAP_API_KEY as string,
+                });
             });
         }
     }, []);
@@ -48,17 +51,21 @@ export const MapProvider = ({ children }: { children: ReactNode }) => {
     const initMap = (location: { longitude: number; latitude: number }) => {
         const { longitude, latitude } = location;
         if (!map) {
-            const myMap = olaMapsRef.current!.init({
-                container: "map",
-                center: [longitude, latitude],
-                zoom: 15,
-            });
-            addMarker(longitude, latitude, myMap, CurrentMarker);
+            if (olaMapsRef.current) {
+                const myMap = olaMapsRef.current.init({
+                    container: "map",
+                    center: [longitude, latitude],
+                    zoom: 15,
+                });
+                addMarker(longitude, latitude, myMap, CurrentMarker);
 
-            setMap(myMap);
-            document
-                .getElementsByClassName("maplibregl-ctrl-attrib")[0]
-                ?.remove();
+                setMap(myMap);
+                document
+                    .getElementsByClassName("maplibregl-ctrl-attrib")[0]
+                    ?.remove();
+            } else {
+                console.error("OlaMaps is not initialized");
+            }
         } else {
             map.setCenter([longitude, latitude]);
         }
