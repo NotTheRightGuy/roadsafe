@@ -30,7 +30,8 @@ def prompt(current_location, api_response, query):
         response = client.chat(
             model="llama3.2", messages=[{"role": "user", "content": prompt}]
         )
-        return response
+        print(response)
+        return response.message.content
     except Exception as e:
         print(f"Error in extraction: {e}")
         return "Sorry, I am unable to process your request at the moment. Please try again later."
@@ -61,7 +62,7 @@ async def process_query(query: Query):
     print(query)
     try:
         result = prompt(query.current_position, query.api_response, query.text)
-        return result
+        return {"response": result}
     except Exception as e:
         return {
             "status": "error",

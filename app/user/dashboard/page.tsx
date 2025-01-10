@@ -18,7 +18,7 @@ import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
 import { supabase } from "@/lib/supabase";
 import { NavigationBar } from "@/components/NavigationBar";
-import Chatbot from "@/components/ui/user-dashboard/Chatbot";
+import { Chatbot } from "@/components/ui/user-dashboard/Chatbot";
 import { useLocationContext } from "@/context/LocationContext";
 // import { useSpeedLimit } from "@/hooks/useSpeedLimit";
 import { Incident } from "@/app/police/dashboard/Dashboard";
@@ -51,11 +51,14 @@ export default function Dashboard() {
                 (payload) => {
                     if (payload.eventType === "DELETE") {
                         setIncidents((prevIncidents) =>
-                            prevIncidents.filter((incident) => incident.id !== payload.old.id)
+                            prevIncidents.filter(
+                                (incident) => incident.id !== payload.old.id
+                            )
                         );
                     } else {
                         setIncidents(
-                            (prevIncidents) => [...prevIncidents, payload.new] as any[]
+                            (prevIncidents) =>
+                                [...prevIncidents, payload.new] as any[]
                         );
                     }
                 }
@@ -104,14 +107,18 @@ export default function Dashboard() {
                         break;
                 }
                 if (marker) {
-                    addMarker(incident.longitude, incident.latitude, map, marker);
+                    addMarker(
+                        incident.longitude,
+                        incident.latitude,
+                        map,
+                        marker
+                    );
                 } else {
                     addMarker(incident.longitude, incident.latitude, map);
                 }
             });
         }
     }, [map, incidents]);
-
 
     const [incidentsOnRoute, setIncidentsOnRoute] = useState<Incident[]>([]);
 
@@ -129,11 +136,12 @@ export default function Dashboard() {
                     setOpen(true);
                 }}
             />
-            <SpeedIndicator speedLimit={60} currentSpeed={currentLocation?.speed ?? 0} />
+
             <Chatbot
                 onClick={() => {
                     setChatOpen(true);
                 }}
+                incidents={incidents}
             />
             <IncidentsIcon
                 onClick={() => {
@@ -155,7 +163,12 @@ export default function Dashboard() {
                 </button>
             </div>
             <AlertDrawer open={open} setOpen={setOpen} />
-            <ChatDrawer open={chatopen} setOpen={setChatOpen} key={"chat-drawer"} />
+            <ChatDrawer
+                open={chatopen}
+                setOpen={setChatOpen}
+                key={"chat-drawer"}
+                incidents={incidents}
+            />
             <IncidentDrawer
                 open={incidentOpen}
                 setOpen={setIncidentOpen}
@@ -164,5 +177,5 @@ export default function Dashboard() {
             />
             <NotificationWatcher incidents={incidents} />
         </div>
-    )
+    );
 }
