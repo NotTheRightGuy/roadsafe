@@ -1,5 +1,11 @@
 "use client";
-import React, { useState, useEffect, useCallback, SetStateAction } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import { getWeather } from "@/lib/actions/getWeather";
 import { useLocationContext } from "@/context/LocationContext";
 import { Weather } from "@/lib/weather";
@@ -10,13 +16,17 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import { Incident } from "@/app/police/dashboard/Dashboard";
 import { haversine } from "@/lib/distance";
-import polylineModule from "@mapbox/polyline"
+import polylineModule from "@mapbox/polyline";
 import { MapPinIcon } from "./markers";
 import { Droplets, Search, WindIcon } from "lucide-react";
 import { jakarta } from "@/app/layout";
 import Logo from "./ui/Logo";
 
-const NavigationBar: React.FC = ({ setIncidentsOnRoute }: { setIncidentsOnRoute: any}) => {
+export function NavigationBar({
+  setIncidentsOnRoute,
+}: {
+  setIncidentsOnRoute: Dispatch<SetStateAction<Incident[]>>;
+}) {
   const { map, addMarker } = useMap();
   const locationCtx = useLocationContext();
   const currentlocation = locationCtx?.currentLocation;
@@ -34,8 +44,8 @@ const NavigationBar: React.FC = ({ setIncidentsOnRoute }: { setIncidentsOnRoute:
         const data = await resp.json();
         setIncidents(data);
       }
-    }
-    fetchIncidents()
+    };
+    fetchIncidents();
   }, []);
 
   useEffect(() => {
@@ -50,10 +60,10 @@ const NavigationBar: React.FC = ({ setIncidentsOnRoute }: { setIncidentsOnRoute:
           incidentsEnRoute.add(incident);
         }
       });
-    })
+    });
     console.log(incidentsEnRoute);
     setIncidentsOnRoute(Array.from(incidentsEnRoute));
-  }, [polyline, incidents])
+  }, [polyline, incidents]);
 
   const fitMapToLocations = (
     currentLocation: { latitude: number; longitude: number },
@@ -107,7 +117,7 @@ const NavigationBar: React.FC = ({ setIncidentsOnRoute }: { setIncidentsOnRoute:
           lat: currentlocation.latitude,
         }
       ).then((data) => {
-        setPolyline(data.routes[0].overview_polyline as string)
+        setPolyline(data.routes[0].overview_polyline as string);
         map.addSource("route", {
           type: "geojson",
           data: {
@@ -132,118 +142,108 @@ const NavigationBar: React.FC = ({ setIncidentsOnRoute }: { setIncidentsOnRoute:
         console.log(data);
       });
     }
-
-    const fetchSuggestions = useCallback(
-      debounce(async (input: string) => {
-        if (input.length > 2 && showModal) {
-          const response = await axios.get(
-            `https://api.olamaps.io/places/v1/autocomplete?input=${input}&api_key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`
-          );
-          setSuggestions(response.data.predictions);
-        } else {
-          setSuggestions([]);
-        }
-      }, 300),
-      [showModal]
-    );
-
-    useEffect(() => {
-      async function fetchData() {
-        if (!currentlocation) {
-          return;
-        }
-        const weatherData = await getWeather(
-          currentlocation.latitude,
-          currentlocation.longitude
+  }
+  const fetchSuggestions = useCallback(
+    debounce(async (input: string) => {
+      if (input.length > 2 && showModal) {
+        const response = await axios.get(
+          `https://api.olamaps.io/places/v1/autocomplete?input=${input}&api_key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`
         );
-        setWeather(weatherData);
+        setSuggestions(response.data.predictions);
+      } else {
+        setSuggestions([]);
       }
-      fetchData();
-    }, [currentlocation]);
+    }, 300),
+    [showModal]
+  );
 
-    useEffect(() => {
-      fetchSuggestions(destination);
-    }, [destination, fetchSuggestions]);
+  useEffect(() => {
+    async function fetchData() {
+      if (!currentlocation) {
+        return;
+      }
+      const weatherData = await getWeather(
+        currentlocation.latitude,
+        currentlocation.longitude
+      );
+      setWeather(weatherData);
+    }
+    fetchData();
+  }, [currentlocation]);
 
-    return (
-      <div className="min-h-36 w-full fixed top-0 z-10 flex flex-col justify-between p-2 ">
-        <div className="bg-white p-2 border shadow-md rounded-lg h-full">
-          <div className="flex flex-col items-center justify-between gap-5">
-            <div
-              className={`flex items-start justify-start gap-3 pr-2 mt-2 w-full ${jakarta.className}`}
-            >
-              <div className="">
-                <Logo />
+  useEffect(() => {
+    fetchSuggestions(destination);
+  }, [destination, fetchSuggestions]);
+
+  return (
+    <div className="min-h-36 w-full fixed top-0 z-10 flex flex-col justify-between p-2 ">
+      <div className="bg-white p-2 border shadow-md rounded-lg h-full">
+        <div className="flex flex-col items-center justify-between gap-5">
+          <div
+            className={`flex items-start justify-start gap-3 pr-2 mt-2 w-full ${jakarta.className}`}
+          >
+            <div className="">
+              <Logo />
+            </div>
+
+            <div className="flex flex-col">
+              <div className="font-bold text-3xl">{weather?.city}</div>
+              <div>{weather?.currentTemp}&deg; C</div>
+            </div>
+            <div className="flex items-center justify-center gap-2 ">
+              <div className="flex justify-between gap-2 items-center">
+                <WindIcon className="hover:bg-transparent text-slate-300 -ml-1" />{" "}
+                <div className="-ml-1">{weather?.windSpeed} Km/hr</div>{" "}
               </div>
-
-              <div className="flex flex-col">
-                <div className="font-bold text-3xl">
-                  {weather?.city}
-                </div>
-                <div>{weather?.currentTemp}&deg; C</div>
-              </div>
-              <div className="flex items-center justify-center gap-2 ">
-                <div className="flex justify-between gap-2 items-center">
-                  <WindIcon className="hover:bg-transparent text-slate-300 -ml-1" />{" "}
-                  <div className="-ml-1">
-                    {weather?.windSpeed} Km/hr
-                  </div>{" "}
-                </div>
-                <div className="flex justify-between gap-2 items-center">
-                  <Droplets className="text-blue-300" />{" "}
-                  <div>{weather?.humidity} %</div>{" "}
-                </div>
+              <div className="flex justify-between gap-2 items-center">
+                <Droplets className="text-blue-300" />{" "}
+                <div>{weather?.humidity} %</div>{" "}
               </div>
             </div>
-            <div className="relative flex items-center h-full w-full flex-1">
-              <div className="relative w-full h-full">
-                <input
-                  onClick={() => setShowModal(true)}
-                  name="destination"
-                  type="text"
-                  placeholder="Where do you want to go?"
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  className={`w-full h-full text-sm py-4 pl-12 pr-2 border font-medium outline-none rounded-lg ${jakarta.className}`}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleInput();
-                    }
-                  }}
-                />
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                  <Search className="text-slate-300" />
-                </div>
+          </div>
+          <div className="relative flex items-center h-full w-full flex-1">
+            <div className="relative w-full h-full">
+              <input
+                onClick={() => setShowModal(true)}
+                name="destination"
+                type="text"
+                placeholder="Where do you want to go?"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className={`w-full h-full text-sm py-4 pl-12 pr-2 border font-medium outline-none rounded-lg ${jakarta.className}`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleInput();
+                  }
+                }}
+              />
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                <Search className="text-slate-300" />
               </div>
+            </div>
 
-              <div className={showModal ? "" : "hidden"}>
-                {suggestions.length > 0 && (
-                  <ul className="absolute top-full left-0 w-full bg-white border rounded shadow-md mt-1 z-10">
-                    {suggestions.map((suggestion, index) => (
-                      <li
-                        key={index}
-                        className="p-2 cursor-pointer hover:bg-gray-200"
-                        onClick={() => {
-                          setDestination(
-                            suggestion.description
-                          );
-                          setSuggestions([]);
-                          handleInput(
-                            suggestion.geometry.location
-                          );
-                        }}
-                      >
-                        {suggestion.description}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+            <div className={showModal ? "" : "hidden"}>
+              {suggestions.length > 0 && (
+                <ul className="absolute top-full left-0 w-full bg-white border rounded shadow-md mt-1 z-10">
+                  {suggestions.map((suggestion, index) => (
+                    <li
+                      key={index}
+                      className="p-2 cursor-pointer hover:bg-gray-200"
+                      onClick={() => {
+                        setDestination(suggestion.description);
+                        setSuggestions([]);
+                        handleInput(suggestion.geometry.location);
+                      }}
+                    >
+                      {suggestion.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 }
-export default NavigationBar;
