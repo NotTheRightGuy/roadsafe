@@ -17,12 +17,14 @@ import useGetIncidents from "@/hooks/useGetIncidents";
 import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
 import { supabase } from "@/lib/supabase";
-import NavigationBar from "@/components/NavigationBar";
+import { NavigationBar } from "@/components/NavigationBar";
 import Chatbot from "@/components/ui/user-dashboard/Chatbot";
 import { useLocationContext } from "@/context/LocationContext";
 import { useSpeedLimit } from "@/hooks/useSpeedLimit";
 import { Incident } from "@/app/police/dashboard/Dashboard";
 import ChatDrawer from "@/components/ui/ChatDrawer";
+import IncidentDrawer from "@/components/ui/IncidentDrawer";
+import IncidentsIcon from "@/components/ui/IncidentsIcon";
 
 export default function Dashboard() {
   const { map, currentLocation, initMap, zoomIn, zoomOut, addMarker } =
@@ -33,6 +35,7 @@ export default function Dashboard() {
 
   const [open, setOpen] = useState(false);
   const [chatopen, setChatOpen] = useState(false);
+  const [incidentOpen, setIncidentOpen] = useState(false);
   const { incidents, setIncidents } = useGetIncidents();
 
   useEffect(() => {
@@ -70,6 +73,7 @@ export default function Dashboard() {
   }, [currentLocation]);
 
   useEffect(() => {
+    console.log(incidents.length);
     if (map != null) {
       incidents.forEach((incident) => {
         let marker: (() => JSX.Element) | null = null;
@@ -108,38 +112,54 @@ export default function Dashboard() {
     }
   }, [map, incidents]);
 
-
   const [incidentsOnRoute, setIncidentsOnRoute] = useState<Incident[]>([]);
+  // create a map of incident type and its count
+  const incidentsMap = incidentsOnRoute.reduce((acc, incident) => {
+    acc[incident.incident_type] = (acc[incident.incident_type] ?? 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 
-    return (
-        <div id="map" className="relative h-full">
-            <NavigationBar setIncidentsOnRoute={setIncidentsOnRoute} />
-            <AlertIcon
-                onClick={() => {
-                    setOpen(true);
-                }}
-            />
-            <SpeedIndicator speedLimit={60} currentSpeed={0} />
-            <Chatbot
+  return (
+    <div id="map" className="relative h-full">
+      <NavigationBar setIncidentsOnRoute={setIncidentsOnRoute} />
+      <AlertIcon
+        onClick={() => {
+          setOpen(true);
+        }}
+      />
+
+      <SpeedIndicator speedLimit={60} currentSpeed={0} />
+      <Chatbot
         onClick={() => {
           setChatOpen(true);
         }}
       />
-            <SpeedIndicator
-                speedLimit={speedLimit.limit}
-                currentSpeed={location?.currentLocation?.speed ?? 0}
-            />
-            <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
-                <button className="rounded-l-full p-2">
-                    <CirclePlus size={24} onClick={zoomIn} />
-                </button>
-                <button className="rounded-r-full">
-                    <CircleMinus size={24} onClick={zoomOut} />
-                </button>
-            </div>
-            <AlertDrawer open={open} setOpen={setOpen} />
-            <ChatDrawer open={chatopen} setOpen={setChatOpen} key={"chat-drawer"} />
-
-        </div>
-    );;
+      <IncidentsIcon
+        onClick={() => {
+          setIncidentOpen(true);
+        }}
+        hidden={incidentsOnRoute.length === 0}
+      />
+      <SpeedIndicator
+        speedLimit={speedLimit.limit}
+        currentSpeed={location?.currentLocation?.speed ?? 0}
+      />
+      <div className="*:p-2 fixed bottom-4 right-2 *:bg-white *:shadow-md z-10">
+        <button className="rounded-l-full p-2">
+          <CirclePlus size={24} onClick={zoomIn} />
+        </button>
+        <button className="rounded-r-full">
+          <CircleMinus size={24} onClick={zoomOut} />
+        </button>
+      </div>
+      <AlertDrawer open={open} setOpen={setOpen} />
+      <ChatDrawer open={chatopen} setOpen={setChatOpen} key={"chat-drawer"} />
+      <IncidentDrawer
+        open={incidentOpen}
+        setOpen={setIncidentOpen}
+        key={"incident-drawer"}
+        incidents={incidentsMap}
+      />
+    </div>
+  );
 }
