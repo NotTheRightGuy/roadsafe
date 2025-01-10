@@ -1,12 +1,10 @@
-import { Waves } from "lucide-react";
-
 export default function SlipperyMarker() {
-	return (
-		<div
-			className="bg-white p-2 rounded-full border border-black"
-			title="Slippery"
-		>
-			<Waves size={20} />
-		</div>
-	);
+  return (
+    <div
+      className="bg-white p-1 text-xl rounded-full border-2 border-rose-600"
+      title="Slippery"
+    >
+      🌧️
+    </div>
+  );
 }

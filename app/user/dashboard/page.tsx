@@ -138,6 +138,7 @@ export default function Dashboard() {
         onClick={() => {
           setIncidentOpen(true);
         }}
+        count={incidentsOnRoute.length}
         hidden={incidentsOnRoute.length === 0}
       />
       <SpeedIndicator

@@ -1,12 +1,11 @@
-import { Ambulance } from "lucide-react";
-
 export default function AccidentMarker() {
-    return (
-        <div
-            className="bg-white p-2 rounded-full border border-black"
-            title="Accident"
-        >
-            <Ambulance size={20} />
-        </div>
-    );
+  return (
+    <div
+      className="bg-white text-xl p-1 rounded-full border-2 border-rose-600"
+      title="Accident"
+    >
+      <span>💥</span>
+      <span className="-ml-4">🚗</span>
+    </div>
+  );
 }

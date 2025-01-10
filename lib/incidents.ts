@@ -5,7 +5,7 @@ export type IncidentType = {
 }
 
 export const incidents: IncidentType[] = [
-  { id: 'crash', label: 'Crash', icon: '🚗'},
+  { id: 'crash', label: 'Crash', icon: '💥🚗'},
   { id: 'road_closure', label: 'Road Closure', icon: '🚧'},
   { id: 'pothole', label: 'Pot Hole', icon: '🕳️'},
   { id: 'construction', label: 'In Construction', icon: '🏗️'},
