@@ -40,7 +40,7 @@ type incidentType =
     | "slippery_road";
 
 async function reverseGeocode(lat: number, lon: number): Promise<string> {
-    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+    const url = `https://api.olamaps.io/places/v1/reverse-geocode?latlng=${lat},${lon}&api_key=${process.env.NEXT_PUBLIC_MAP_API_KEY}`;
 
     try {
         const response = await fetch(url);
@@ -49,9 +49,7 @@ async function reverseGeocode(lat: number, lon: number): Promise<string> {
         }
 
         const data = await response.json();
-        const district = data.address.state_district;
-        const state = data.address.state;
-        return `${district}, ${state}`;
+        return data.results[0].formatted_address;
     } catch (error) {
         console.error("Failed to reverse geocode:", error);
         return "Unknown location";
