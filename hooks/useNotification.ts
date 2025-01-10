@@ -5,6 +5,7 @@ export function useNotification() {
 	return {
 		notify: (title: string, message: string) => {
 			toast({ title: title, description: message })
+			console.log(message)
 			const utterance = new SpeechSynthesisUtterance(message);
 			window.speechSynthesis.speak(utterance);
 		},
