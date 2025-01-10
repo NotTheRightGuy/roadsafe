@@ -163,6 +163,11 @@ function IncidentFeed({ incidents }: { incidents: any }) {
                 <h2 className="text-xl font-semibold">Live Incident Feed</h2>
             </div>
             <div className="divide-y overflow-y-scroll flex-1">
+                {incidents.length === 0 && (
+                    <div className="p-4 text-center text-muted-foreground">
+                        No incidents reported yet
+                    </div>
+                )}
                 {incidents.map((incident: any) => (
                     <IncidentCard
                         key={incident.id}
