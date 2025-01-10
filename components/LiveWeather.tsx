@@ -4,7 +4,7 @@ import { Weather } from "@/lib/weather";
 import { Snowflake, Droplets, Wind, Cloud, Gauge } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useLocationContext } from "@/context/LocationContext";
-import NavigationBar from "./NavigationBar";
+import { NavigationBar } from "./NavigationBar";
 
 export function isHazardousWeather(weather: Weather): boolean {
     const HAZARDOUS_WEATHER = [

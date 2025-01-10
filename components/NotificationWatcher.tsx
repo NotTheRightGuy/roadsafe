@@ -3,6 +3,8 @@ import { useLocationContext } from "@/context/LocationContext";
 import { useNotification } from "@/hooks/useNotification";
 import { haversine } from "@/lib/distance";
 import { useEffect, useRef } from "react";
+import { getWeather } from "@/lib/actions/getWeather";
+import { isHazardousWeather } from "./LiveWeather";
 
 export function NotificationWatcher({ incidents }: { incidents: Incident[] }) {
 	const { notify } = useNotification();
@@ -32,6 +34,28 @@ export function NotificationWatcher({ incidents }: { incidents: Incident[] }) {
 			}
 		});
 	}, [incidents, notify, locCtx]);
+
+	const weatherNotification = () => {
+		const latitude = locCtx?.currentLocation?.latitude ?? null;
+		const longitude = locCtx?.currentLocation?.longitude ?? null;
+		if (!latitude || !longitude) {
+			setTimeout(weatherNotification, 15 * 1000)
+			return
+		};
+
+		getWeather(latitude, longitude).
+		then((weather) => {
+			console.log(weather)
+			if (isHazardousWeather(weather)) {
+				notify("Hazardous weather", `The weather is ${weather.description}, please drive safely`)
+			}
+		})
+
+		setTimeout(weatherNotification, 30 * 60 * 1000);
+	}
+	useEffect(() => {
+		weatherNotification();
+	}, []);
 
 	if (!locCtx) return null;
 	return (<div className="hidden">lmao</div>)
