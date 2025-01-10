@@ -143,6 +143,7 @@ export function NavigationBar({
       });
     }
   }
+
   const fetchSuggestions = useCallback(
     debounce(async (input: string) => {
       if (input.length > 2 && showModal) {
@@ -246,4 +247,5 @@ export function NavigationBar({
       </div>
     </div>
   );
-}
+};
+

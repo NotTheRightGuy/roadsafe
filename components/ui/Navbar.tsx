@@ -9,10 +9,7 @@ function Navbar() {
         <Logo />
         <h1 className="font-black text-2xl">Roadsafe</h1>
       </div>
-      <nav className="flex flex-wrap items-center justify-center gap-4 mr-2">
-        {/* <Link href="/signup" className="py-2  text-zinc-950 font-semibold">Sign Up</Link> */}
-        <Link href="/login" className="py-2 px-4 rounded-lg bg-red-700 text-zinc-50">SignUp</Link>
-      </nav>
+      <nav className="flex flex-wrap items-center justify-center gap-4 mr-2"></nav>
     </header>
   );
 }

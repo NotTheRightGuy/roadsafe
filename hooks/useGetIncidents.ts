@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-interface Incident {
+export interface Incident {
     id: number;
     created_at: string;
     longitude: number;
