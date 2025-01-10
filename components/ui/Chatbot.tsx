@@ -30,6 +30,13 @@ export function ChatBot(props: ChatDemoProps) {
         event?.preventDefault?.();
         setIsLoading(true);
 
+        // Append user message immediately
+        setMessages((prev) => [
+            ...prev,
+            { id: crypto.randomUUID(), role: "user", content: input },
+        ]);
+        setInput("");
+
         try {
             const response = await fetch("http://localhost:8000/api/process", {
                 method: "POST",
@@ -47,14 +54,12 @@ export function ChatBot(props: ChatDemoProps) {
             console.log(data);
             setMessages((prev) => [
                 ...prev,
-                { id: crypto.randomUUID(), role: "user", content: input },
                 {
                     id: crypto.randomUUID(),
                     role: "assistant",
                     content: data.response,
                 },
             ]);
-            setInput("");
         } catch (error) {
             console.error("Error:", error);
         } finally {
@@ -67,11 +72,11 @@ export function ChatBot(props: ChatDemoProps) {
     };
 
     const append = (message: { role: "user"; content: string }) => {
-        const messageWithId: Message = {
-            ...message,
-            id: crypto.randomUUID(),
-        };
-        setMessages((prev) => [...prev, messageWithId]);
+        // const messageWithId: Message = {
+        //     ...message,
+        //     id: crypto.randomUUID(),
+        // };
+        // setMessages((prev) => [...prev, messageWithId]);
     };
     return (
         <div className="flex h-full w-full">
