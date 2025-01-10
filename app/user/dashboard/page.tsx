@@ -18,7 +18,7 @@ import { AlertDrawer } from "@/components/AlertDrawer";
 import { SpeedIndicator } from "@/components/ui/SpeedIndicator";
 import { supabase } from "@/lib/supabase";
 import { NavigationBar } from "@/components/NavigationBar";
-import Chatbot from "@/components/ui/user-dashboard/Chatbot";
+import { Chatbot } from "@/components/ui/user-dashboard/Chatbot";
 import { useLocationContext } from "@/context/LocationContext";
 // import { useSpeedLimit } from "@/hooks/useSpeedLimit";
 import { Incident } from "@/app/police/dashboard/Dashboard";

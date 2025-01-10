@@ -4,6 +4,7 @@ import { jakarta } from "@/app/layout";
 import { Button } from "./button";
 import { ChatBot } from "./Chatbot";
 import { Incident } from "@/hooks/useGetIncidents";
+import { Incident } from "@/hooks/useGetIncidents";
 
 function ChatDrawer({
   open,
