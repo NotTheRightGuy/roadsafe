@@ -250,7 +250,7 @@ export default function Dashboard() {
     return (
         <div className="max-h-screen w-full">
             <div className="grid lg:grid-cols-5 gap-4 h-full">
-                <div className="lg:col-span-3 h-full">
+                <div className="lg:col-span-3 min-h-screen">
                     <div
                         id="map"
                         className="relative w-full h-full bg-zinc-100 rounded-lg overflow-hidden"
