@@ -17,8 +17,8 @@ function Section1() {
           Preventing Accidents Through the Power of Community Reporting
         </p>
         <Link
-          href="#"
-          className="rounded-xl bg-slate-900 px-4 py-3 text-base font-bold text-slate-50"
+          href="/user/dashboard"
+          className="rounded-xl bg-slate-900 hover:bg-slate-700 px-4 py-3 text-base font-bold text-slate-50"
         >
           Report Accident
         </Link>
