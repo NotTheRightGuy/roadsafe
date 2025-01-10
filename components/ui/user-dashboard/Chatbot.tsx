@@ -39,7 +39,6 @@ export function Chatbot({ ...props }) {
             if (!res.ok) {
                 throw new Error("Failed to fetch response");
             }
-
             const data = await res.json();
             setMessages((prev) => [
                 ...prev,
