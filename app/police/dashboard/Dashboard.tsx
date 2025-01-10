@@ -248,7 +248,7 @@ export default function Dashboard() {
   }, [map, incidents]);
 
   return (
-    <div className="h-full w-full px-4">
+    <div className="max-h-screen w-full px-4">
       <div className="grid lg:grid-cols-5 gap-4 h-full">
         <div className="lg:col-span-3 h-full">
           <div
